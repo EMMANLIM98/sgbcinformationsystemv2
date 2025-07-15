@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model sgbcinformationsystem_Groups {
+  Id                            Int                             @id @default(autoincrement())
+  Name                          String                          @default("") @db.VarChar(256)
+  CreatedAt                     DateTime                        @default(now()) @db.Timestamptz(6)
+  UpdatedAt                     DateTime?                       @db.Timestamptz(6)
+  sgbcinformationsystem_Members sgbcinformationsystem_Members[]
+
+  @@index([Name], map: "Group_Idx")
+}
+
+model sgbcinformationsystem_Logins {
+  Id                            Int                             @id @default(autoincrement())
+  Username                      String                          @default("") @db.VarChar(256)
+  Password                      String                          @default("") @db.VarChar(256)
+  LastLogin                     DateTime?                       @default(now()) @db.Timestamptz(6)
+  CreatedAt                     DateTime                        @default(now()) @db.Timestamptz(6)
+  UpdatedAt                     DateTime?                       @db.Timestamptz(6)
+  sgbcinformationsystem_Members sgbcinformationsystem_Members[]
+
+  @@index([Username], map: "Login_Idx")
+}
+
+model sgbcinformationsystem_Members {
+  Id                           Int                           @id @default(autoincrement())
+  FirstName                    String                        @db.VarChar(256)
+  LastName                     String                        @db.VarChar(256)
+  Email                        String?                       @default("") @db.VarChar(256)
+  Mobile                       String?                       @default("") @db.VarChar(15)
+  Birthdate                    DateTime?                     @db.Date
+  Address                      String?                       @default("") @db.VarChar(256)
+  IsActive                     Boolean                       @default(true)
+  Group                        Int?                          @default(0)
+  Role                         Int?                          @default(0)
+  Login                        Int?                          @default(0)
+  CreatedAt                    DateTime                      @default(now()) @db.Timestamptz(6)
+  UpdatedAt                    DateTime?                     @db.Timestamptz(6)
+  SpiritualBirthdate           DateTime?                     @db.Date
+  sgbcinformationsystem_Groups sgbcinformationsystem_Groups? @relation(fields: [Group], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "sgbcinformationsystem_Members_Group_sgbcinformationsystem_Group")
+  sgbcinformationsystem_Logins sgbcinformationsystem_Logins? @relation(fields: [Login], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "sgbcinformationsystem_Members_Login_sgbcinformationsystem_Login")
+  sgbcinformationsystem_Roles  sgbcinformationsystem_Roles?  @relation(fields: [Role], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "sgbcinformationsystem_Members_Role_sgbcinformationsystem_Roles_")
+
+  @@index([Email], map: "MemberEmail_Idx")
+}
+
+model sgbcinformationsystem_Roles {
+  Id                            Int                             @id @default(autoincrement())
+  Name                          String                          @default("") @db.VarChar(256)
+  CreatedAt                     DateTime                        @default(now()) @db.Timestamptz(6)
+  UpdatedAt                     DateTime?                       @db.Timestamptz(6)
+  sgbcinformationsystem_Members sgbcinformationsystem_Members[]
+
+  @@index([Name], map: "Role_Idx")
+}
+
+model sgbcinformationsystem_Visitors {
+  Id                 Int       @id @default(autoincrement())
+  FirstName          String    @db.VarChar(256)
+  LastName           String    @db.VarChar(256)
+  Email              String?   @default("") @db.VarChar(256)
+  Mobile             String?   @default("") @db.VarChar(15)
+  Birthdate          DateTime? @db.Date
+  Address            String?   @default("") @db.VarChar(256)
+  WillingToBeVisited Boolean   @default(false)
+  DateAttended       DateTime? @db.Date
+  CreatedAt          DateTime  @default(now()) @db.Timestamptz(6)
+  UpdatedAt          DateTime? @db.Timestamptz(6)
+
+  @@index([Email], map: "VisitorEmail_Idx")
+}
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@unique([provider, providerAccountId])
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  passwordHash  String
+  image         String?
+  accounts      Account[]
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
