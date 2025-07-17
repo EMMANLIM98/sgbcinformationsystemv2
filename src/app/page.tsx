@@ -1,6 +1,5 @@
 import { auth, signOut } from "@/auth";
 import { Button } from "@heroui/button";
-import Link from "next/link";
 import { FaRegSmile } from "react-icons/fa";
 
 export default async function Home() {
