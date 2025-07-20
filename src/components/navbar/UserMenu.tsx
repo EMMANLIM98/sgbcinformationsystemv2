@@ -1,5 +1,5 @@
 'use client';
-import { signOut } from '@/auth'
+import { signOutUser } from '@/app/actions/authActions';
 import { Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownSection, DropdownItem } from '@heroui/react'
 import { Session } from 'next-auth'
 import Link from 'next/link'
@@ -32,7 +32,7 @@ export default function UserMenu({user}: Props) {
           <DropdownItem key='editProfile' as={Link} href='/members/edit'>
             Edit Profile
           </DropdownItem>
-          <DropdownItem key='logOut' color='danger' onPress={() => signOut()}>
+          <DropdownItem key='logOut' color='danger' onPress={() => signOutUser()}>
             Logout
           </DropdownItem>
         </DropdownMenu>
