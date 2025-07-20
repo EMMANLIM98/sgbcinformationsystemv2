@@ -112,30 +112,32 @@ model User {
 }
 
 model Member {
-  id            String    @id @default(cuid())
-  userId        String    @unique
-  firstName     String
-  lastName      String
-  email         String?   @unique
-  gender        String
-  address       String?
-  contactNumber String?
-  dateOfBirth   DateTime?
-  isActive      Boolean   @default(true)
-  created       DateTime  @default(now())
-  updated       DateTime  @default(now())
-  description   String?
-  city          String?
-  country       String?
-  image         String?
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  photos        Photo[]
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+  firstName          String
+  lastName           String
+  email              String?   @unique
+  emailVerified      DateTime?
+  gender             String
+  address            String?
+  contactNumber      String?
+  dateOfBirth        DateTime?
+  spiritualBirthDate DateTime?
+  isActive           Boolean   @default(true)
+  created            DateTime  @default(now())
+  updated            DateTime  @default(now())
+  description        String?
+  city               String?
+  country            String?
+  image              String?
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photos             Photo[]
 }
 
 model Photo {
   id       String   @id @default(cuid())
   url      String
-  publicId String
+  publicId String?
   created  DateTime @default(now())
   updated  DateTime @default(now())
   memberId String

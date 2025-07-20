@@ -14,12 +14,12 @@ import { toast } from 'react-toastify';
 
 export default function LoginForm() {
     const router = useRouter();
-    const {register, handleSubmit, formState: {errors, isValid, isSubmitting}} = useForm<LoginSchema>({
+    const { register, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
         mode: 'onTouched',
     });
 
-    const onSubmit = async (data: LoginSchema ) => {
+    const onSubmit = async (data: LoginSchema) => {
         const result = await signInUser(data);
         if (result.status === 'success') {
             router.push('/members');
@@ -51,7 +51,7 @@ export default function LoginForm() {
                             isInvalid={!!errors.email}
                             errorMessage={errors.email?.message as string}
                         />
-                        <Input 
+                        <Input
                             defaultValue=''
                             label='Password'
                             variant='bordered'

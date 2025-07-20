@@ -12,31 +12,31 @@ import { ZodIssue } from "zod/v3";
 
 export async function signInUser(data: LoginSchema): Promise<ActionResult<string>> {
     try {
-        const result = await signIn('credentials',{
+        const result = await signIn('credentials', {
             email: data.email,
             password: data.password,
             redirect: false
         });
         console.log(result);
 
-        return {status: 'success', data: 'Logged in successfully.'};
+        return { status: 'success', data: 'Logged in successfully.' };
     } catch (error) {
         console.log(error);
         if (error instanceof AuthError) {
             switch (error.type) {
                 case 'CredentialsSignin':
-                    return {status: 'error', error: 'Invalid email or password.'};
+                    return { status: 'error', error: 'Invalid email or password.' };
                 default:
-                    return {status: 'error', error: 'An unexpected error occurred.'};
+                    return { status: 'error', error: 'An unexpected error occurred.' };
             }
         } else {
-            return {status: 'error', error: 'An unexpected error occurred.'};
+            return { status: 'error', error: 'An unexpected error occurred.' };
         }
     }
 }
 
 export async function signOutUser() {
-    await signOut({redirectTo: '/'});
+    await signOut({ redirectTo: '/' });
 }
 
 export async function registerUser(data: RegisterSchema): Promise<ActionResult<User>> {
@@ -47,16 +47,16 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
             return { status: 'error', error: validated.error.issues as ZodIssue[] };
         }
 
-        const {name, email, password} = validated.data;
+        const { name, email, password } = validated.data;
 
         const hashedPassword = await bcrypt.hash(password, 14);
 
         const existingUser = await prisma.user.findUnique({
-            where: { email: email }        
+            where: { email: email }
         })
 
         if (existingUser) {
-            return {status: 'error', error: 'User already exists with this email.'}
+            return { status: 'error', error: 'User already exists with this email.' }
         }
 
         const user = await prisma.user.create({
@@ -67,21 +67,21 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
             }
         })
 
-        return {status: 'success', data: user}
+        return { status: 'success', data: user }
     } catch (error) {
         console.log(error);
-        return {status: 'error', error: 'An unexpected error occurred.'}
+        return { status: 'error', error: 'An unexpected error occurred.' }
     }
 }
 
 export async function getUserByEmail(email: string) {
     return await prisma.user.findUnique({
-        where: {email: email}
+        where: { email: email }
     })
 }
 
 export async function getUserById(id: string) {
     return await prisma.user.findUnique({
-        where: {id: id}
+        where: { id: id }
     })
 }
