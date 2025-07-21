@@ -1,11 +1,17 @@
-import Link from 'next/link'
 import React from 'react'
+import { getMembers } from '../actions/memberActions'
 
-export default function MembersPage() {
+
+export default async  function MembersPage() {
+  const members = await getMembers();
+
   return (
     <div>
-        <h3 className='text-3xl'>This will be the members page.</h3>
-        <Link href="/">Go back home</Link>
+        <ul>
+          {members && members.map(member => (
+            <li key={member.id}>{member.firstName} {member.lastName}</li>
+          ))}
+        </ul>
     </div>
   )
 }
