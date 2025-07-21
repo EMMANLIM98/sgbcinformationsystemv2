@@ -8,13 +8,7 @@ export async function getMembers() {
     if (!session?.user) return null;
 
     try {
-        return prisma.member.findMany({
-            where: {
-                NOT: {
-                    userId: session.user.id
-                }
-            }
-        });
+        return prisma.member.findMany();
     } catch (error) {
         console.log(error);
     }
