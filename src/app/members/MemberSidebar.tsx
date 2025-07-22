@@ -18,7 +18,7 @@ export default function MemberSidebar({ member }: Props) {
     const pathname = usePathname();
     const basePath = `/members/${member.userId}`;
     const navLinks = [
-        { name: 'Profile', href: `${basePath}/profile` },
+        { name: 'Profile', href: `${basePath}` },
         { name: 'Photos', href: `${basePath}/photos` },
         { name: 'Chat', href: `${basePath}/chat` },
 
