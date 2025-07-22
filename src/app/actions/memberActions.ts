@@ -11,6 +11,7 @@ export async function getMembers() {
         return prisma.member.findMany();
     } catch (error) {
         console.log(error);
+        throw error;
     }
 }
 
