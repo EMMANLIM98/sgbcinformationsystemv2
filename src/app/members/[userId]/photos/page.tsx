@@ -4,8 +4,8 @@ import { Divider } from '@heroui/divider'
 import Image from 'next/image';
 import React from 'react'
 
-export default async function PhotosPage({params}: Promise<{ userId: string }>) {
-    const {userId} = await params;
+export default async function PhotosPage({ params }: { params: { userId: string } }) {
+    const { userId } = params;
     console.log('userId', userId);
     const photos = await getMemberPhotosByUserId(userId);
 
