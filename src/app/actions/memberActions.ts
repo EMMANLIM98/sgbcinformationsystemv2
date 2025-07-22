@@ -13,3 +13,14 @@ export async function getMembers() {
         console.log(error);
     }
 }
+
+export async function getMemberByUserId(userId: string) {
+    const session = await auth();
+    if (!session?.user) return null;
+
+    try {
+        return prisma.member.findUnique({where: {userId}});
+    } catch (error) {
+        console.log(error);
+    }
+}
