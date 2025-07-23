@@ -1,7 +1,15 @@
 import React from 'react'
+import ListTab from './ListTab'
+import { fetchCurrentUserLikeIds, fetchLikedMembers } from '../actions/likeActions'
 
-export default function ListsPage() {
+export default async function ListsPage({searchParams} : {searchParams: Promise<{type:string}>}) {
+  const {type} = await searchParams;
+  const likeIds = await fetchCurrentUserLikeIds();
+  const members = await fetchLikedMembers(type);
+
   return (
-    <div>ListsPage</div>
+    <div>
+      <ListTab members={members} likeIds={likeIds} />
+    </div>
   )
 }
