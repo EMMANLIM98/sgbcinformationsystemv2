@@ -7,14 +7,14 @@ import { getAuthUserId } from "./authActions";
 import { ZodIssue } from "zod/v3";
 import { prisma } from "@/lib/prisma";
 
-export async function createMessage(recipientUserId: string, data: MessageSchema) : Promise<ActionResult<Message>> {
+export async function createMessage(recipientUserId: string, data: MessageSchema): Promise<ActionResult<Message>> {
     try {
         const userId = await getAuthUserId();
         const validated = messageSchema.safeParse(data);
-        
-        if (!validated.success) return {status: 'error', error: validated.error.issues as ZodIssue[]};
-        
-        const {text} = validated.data;
+
+        if (!validated.success) return { status: 'error', error: validated.error.issues as ZodIssue[] };
+
+        const { text } = validated.data;
         const message = await prisma.message.create({
             data: {
                 text,
@@ -23,9 +23,60 @@ export async function createMessage(recipientUserId: string, data: MessageSchema
             }
         });
 
-        return {status: 'success', data: message}
+        return { status: 'success', data: message }
     } catch (error) {
         console.log(error);
-        return {status: 'error', error: 'An unexpected error occurred while creating the message.'};
+        return { status: 'error', error: 'An unexpected error occurred while creating the message.' };
+    }
+}
+
+export async function getMessageThread(recipientId: string) {
+    try {
+        const userId = await getAuthUserId();
+
+        return prisma.message.findMany({
+            where: {
+                OR: [
+                    {
+                        senderId: userId,
+                        recipientId
+                    },
+                    {
+                        senderId: recipientId,
+                        recipientId: userId
+                    }
+                ]
+            },
+            orderBy: {
+                created: 'asc'
+            },
+            select: {
+                id: true,
+                text: true,
+                created: true,
+                dateRead: true,
+                sender: {
+                    select: {
+                        userId: true,
+                        firstName: true,
+                        lastName: true,
+                        image: true
+                    }
+                },
+                recipient: {
+                    select: {
+                        userId: true,
+                        firstName: true,
+                        lastName: true,
+                        image: true
+                    }
+
+                }
+            }
+        });
+
+    } catch (error) {
+        console.log(error);
+        throw error;
     }
 }
