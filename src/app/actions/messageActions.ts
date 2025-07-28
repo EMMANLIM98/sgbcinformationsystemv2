@@ -1,0 +1,31 @@
+'use server';
+
+import { messageSchema, MessageSchema } from "@/lib/schemas/messageSchema";
+import { ActionResult } from "@/types";
+import { Message } from "@prisma/client";
+import { getAuthUserId } from "./authActions";
+import { ZodIssue } from "zod/v3";
+import { prisma } from "@/lib/prisma";
+
+export async function createMessage(recipientUserId: string, data: MessageSchema) : Promise<ActionResult<Message>> {
+    try {
+        const userId = await getAuthUserId();
+        const validated = messageSchema.safeParse(data);
+        
+        if (!validated.success) return {status: 'error', error: validated.error.issues as ZodIssue[]};
+        
+        const {text} = validated.data;
+        const message = await prisma.message.create({
+            data: {
+                text,
+                recipientId: recipientUserId,
+                senderId: userId
+            }
+        });
+
+        return {status: 'success', data: message}
+    } catch (error) {
+        console.log(error);
+        return {status: 'error', error: 'An unexpected error occurred while creating the message.'};
+    }
+}
