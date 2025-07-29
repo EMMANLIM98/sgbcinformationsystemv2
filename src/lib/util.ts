@@ -1,5 +1,4 @@
-import { image } from '@heroui/react';
-import { differenceInYears } from 'date-fns';
+import { differenceInYears, format } from 'date-fns';
 import { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 import { ZodIssue } from "zod/v3";
 
@@ -8,12 +7,16 @@ export function calculateAge(dob: Date | null) {
     return differenceInYears(new Date(), new Date(dob));
 }
 
+export function formatShrotDateTime(date: Date) {
+    return format(date, 'dd MMM yy h:mm:a');
+}
+
 export function handleFormServerErrors<TFieldValues extends FieldValues>(errorResponse: { error: string | ZodIssue[] }, setError: UseFormSetError<TFieldValues>) {
     let errors = errorResponse.error;
 
     if (typeof errors === 'string') {
         try {
-           errors = JSON.parse(errors);
+            errors = JSON.parse(errors);
         } catch (error) {
             console.log(error);
             setError('root.serverError', { message: String(error) });
@@ -39,4 +42,4 @@ export function transformImageUrl(imageUrl?: string | null) {
     const transformation = 'c_fill,w_300,h_300,g_faces/';
 
     return `${imageUrl.slice(0, uploadIndex)}${transformation}${imageUrl.slice(uploadIndex)}`;
- }
+}
