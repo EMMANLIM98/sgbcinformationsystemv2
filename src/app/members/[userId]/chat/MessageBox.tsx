@@ -12,11 +12,11 @@ type Props = {
 
 export default function MessageBox({ message, currentUserId }: Props) {
     const isCurrentUserSender = message.senderId === currentUserId;
-const messageEndRef = useRef<HTMLDivElement>(null);
+    const messageEndRef = useRef<HTMLDivElement>(null);
 
-useEffect(() => {
-    if (messageEndRef.current) messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
-}, [messageEndRef]);
+    useEffect(() => {
+        if (messageEndRef.current) messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }, [messageEndRef]);
 
     const renderAvatar = () => (
         <Avatar
@@ -69,7 +69,7 @@ useEffect(() => {
                 {renderMessageContent()}
                 {!isCurrentUserSender && renderAvatar()}
             </div>
-            <div ref={messageEndRef}/>
+            <div ref={messageEndRef} />
         </div>
     )
 }

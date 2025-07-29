@@ -9,7 +9,6 @@ import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { HiPaperAirplane } from 'react-icons/hi2';
-import { set } from 'zod';
 
 export default function ChatForm() {
     const router = useRouter();
@@ -30,7 +29,7 @@ export default function ChatForm() {
         } else {
             reset();
             router.refresh();
-            setTimeout(() => setFocus('text'), 50);        
+            setTimeout(() => setFocus('text'), 50);
         }
     }
 
