@@ -35,9 +35,11 @@ type MessageDto = {
     created: string
     dateRead: string | null
     senderId?: string
-    senderName?: string
+    senderFirstName?: string
+    senderLastName?: string
     senderImage?: string | null
     recipientId?: string
-    recipientName?: string
+    recipientFirstName?: string
+    recipientLastName?: string
     recipientImage?: string | null
 }
