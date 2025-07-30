@@ -28,11 +28,11 @@ export default function MessageTable({ messages }: Props) {
 
     return (
         <Card className='flex flex-col gap-3 h-[80vh] overflow-auto'>
-            <Table 
-            aria-label="Message" 
-            selectionMode="single" 
-            onRowAction={(key) => handleRowSelect(key)}
-            shadow='none'
+            <Table
+                aria-label="Message"
+                selectionMode="single"
+                onRowAction={(key) => handleRowSelect(key)}
+                shadow='none'
             >
                 <TableHeader columns={columns}>
                     {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
@@ -40,7 +40,12 @@ export default function MessageTable({ messages }: Props) {
                 <TableBody items={messages}>
                     {(item) => (
                         <TableRow key={item.id} className='cursor-pointer'>
-                            {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+                            {(columnKey) =>
+                                <TableCell>
+                                    <div className={`${!item.dateRead && !isOutbox ? 'font-semibold' : ''}`}>
+                                        {getKeyValue(item, columnKey)}
+                                    </div>
+                                </TableCell>}
                         </TableRow>
                     )}
                 </TableBody>
