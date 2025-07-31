@@ -57,6 +57,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 => Cloudinary
 => Clsx
 => Pusher
+=> Zustand
 
 
 ## Downgrade to Tailwind CSS v3 and Upgrade to Tailwind CSS v4:
