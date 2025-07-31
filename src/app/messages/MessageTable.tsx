@@ -3,8 +3,10 @@
 import { MessageDto } from '@/types';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Card, Avatar, Button } from '@heroui/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { Key, useCallback } from 'react'
+import React, { Key, useCallback, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai';
+import { deleteMessage } from '../actions/messageActions';
+import truncateString from '@/lib/util';
 
 type Props = {
     messages: MessageDto[]
@@ -14,6 +16,7 @@ export default function MessageTable({ messages }: Props) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const isOutbox = searchParams.get('container') === 'outbox';
+    const [isDeleting, setIsDeleting] = useState({ id: '', loading: false })
 
     const columns = [
         { key: isOutbox ? 'recipientFirstName' : 'senderFirstName', label: isOutbox ? 'Recipient' : 'Sender' },
@@ -21,6 +24,13 @@ export default function MessageTable({ messages }: Props) {
         { key: 'created', label: isOutbox ? 'Date Sent' : 'Date Received' },
         { key: 'actions', label: 'Actions' }
     ]
+
+    const handleDeleteMessage = useCallback(async (message: MessageDto) => {
+        setIsDeleting({ id: message.id, loading: true });
+        await deleteMessage(message.id, isOutbox);
+        router.refresh();
+        setIsDeleting({ id: '', loading: false });
+    }, [isOutbox, router]);
 
     const renderCell = useCallback((item: MessageDto, columnKey: keyof MessageDto) => {
         const cellValue = item[columnKey];
@@ -40,20 +50,25 @@ export default function MessageTable({ messages }: Props) {
                 );
             case 'text':
                 return (
-                    <div className='truncate'>
-                        {cellValue}
+                    <div>
+                        {truncateString(cellValue)}
                     </div>
                 )
             case 'created':
                 return cellValue
             default:
                 return (
-                    <Button isIconOnly variant='light'>
+                    <Button
+                        isIconOnly
+                        variant='light'
+                        onPress={() => handleDeleteMessage(item)}
+                        isLoading={isDeleting.id === item.id && isDeleting.loading}
+                    >
                         <AiFillDelete size={24} className='text-danger' />
                     </Button>
                 )
         }
-    }, [isOutbox])
+    }, [isOutbox, isDeleting.id, isDeleting.loading, handleDeleteMessage]);
 
     const handleRowSelect = (key: Key) => {
         const message = messages.find(m => m.id === key);
@@ -70,7 +85,10 @@ export default function MessageTable({ messages }: Props) {
                 shadow='none'
             >
                 <TableHeader columns={columns}>
-                    {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+                    {(column) =>
+                        <TableColumn key={column.key} width={column.key === 'text'? '50%' : undefined}>
+                            {column.label}
+                        </TableColumn>}
                 </TableHeader>
                 <TableBody items={messages}>
                     {(item) => (
