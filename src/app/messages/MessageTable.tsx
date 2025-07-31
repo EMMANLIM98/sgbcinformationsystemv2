@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Key, useCallback, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai';
 import { deleteMessage } from '../actions/messageActions';
-import truncateString from '@/lib/util';
+import { truncateString } from '@/lib/util';
 
 type Props = {
     messages: MessageDto[]
