@@ -1,4 +1,4 @@
-import { differenceInYears, format } from 'date-fns';
+import { differenceInYears, format, formatDistance } from 'date-fns';
 import { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 import { ZodIssue } from "zod/v3";
 
@@ -9,6 +9,10 @@ export function calculateAge(dob: Date | null) {
 
 export function formatShrotDateTime(date: Date) {
     return format(date, 'dd MMM yy h:mm:a');
+}
+
+export function timeAgo(date: string) {
+    return formatDistance(new Date(date), new Date()) + ' ago';
 }
 
 export function handleFormServerErrors<TFieldValues extends FieldValues>(errorResponse: { error: string | ZodIssue[] }, setError: UseFormSetError<TFieldValues>) {
@@ -44,9 +48,9 @@ export function transformImageUrl(imageUrl?: string | null) {
     return `${imageUrl.slice(0, uploadIndex)}${transformation}${imageUrl.slice(uploadIndex)}`;
 }
 
-export function truncateString(text?: string |null, num = 50) {
+export function truncateString(text?: string | null, num = 50) {
     if (!text) return null;
-    if(text.length <= num) return text;
+    if (text.length <= num) return text;
     return text.slice(0, num) + '...';
 }
 

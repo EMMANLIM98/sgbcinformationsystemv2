@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import MessageBox from './MessageBox';
 import { MessageDto } from '@/types';
 import { pusherClient } from '@/lib/pusher';
+import { formatShrotDateTime } from '@/lib/util';
+import { Channel } from 'pusher-js';
 
 type Props = {
     initialMessages: MessageDto[]
@@ -12,23 +14,39 @@ type Props = {
 }
 
 export default function MessageList({ initialMessages, currentUserId, chatId }: Props) {
+    const channelRef = useRef<Channel | null>(null);
     const [messages, setMessages] = useState(initialMessages);
 
     const handleNewMessage = useCallback((message: MessageDto) => {
         setMessages(prevState => {
             return [...prevState, message]
         })
-    }, [])
+    }, []);
+
+    const handleReadMessages = useCallback((messageIds: string[]) => {
+        setMessages(prevState => prevState.map(message => messageIds.includes(message.id)
+            ? { ...message, dateRead: formatShrotDateTime(new Date()) }
+            : message
+        ));
+    }, []);
 
     useEffect(() => {
-        const channel = pusherClient.subscribe(chatId);
-        channel.bind('message:new', handleNewMessage);
+        if (!channelRef.current) {
+            channelRef.current = pusherClient.subscribe(chatId);
+            
+            channelRef.current.bind('message:new', handleNewMessage);
+            channelRef.current.bind('messages:read', handleReadMessages);
+        }
 
         return () => {
-            channel.unsubscribe();
-            channel.unbind('message:new', handleNewMessage);
+            if (channelRef.current && channelRef.current.subscribed) {
+                channelRef.current.unsubscribe();
+                channelRef.current.unbind('message:new', handleNewMessage);
+                channelRef.current.unbind('messages:read', handleReadMessages);
+            }
+
         }
-    }, [chatId, handleNewMessage]);
+    }, [chatId, handleNewMessage, handleReadMessages]);
 
     return (
         <div>

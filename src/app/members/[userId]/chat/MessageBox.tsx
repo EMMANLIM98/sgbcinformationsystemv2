@@ -3,7 +3,7 @@ import { MessageDto } from '@/types'
 import React, { useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { Avatar } from '@heroui/react'
-import { transformImageUrl } from '@/lib/util'
+import { timeAgo, transformImageUrl } from '@/lib/util'
 
 type Props = {
     message: MessageDto
@@ -38,8 +38,8 @@ export default function MessageBox({ message, currentUserId }: Props) {
         <div className={clsx('flex items-center w-full', {
             'justify-between': !isCurrentUserSender
         })}>
-            {message.dateRead && message.recipientId !== currentUserId ? (
-                <span className='text-xs text-black text-italic'>(Read 14 mins ago)</span>
+            {message.dateRead && message.recipientId === currentUserId ? (
+                <span className='text-xs text-black text-italic'>(Read {timeAgo(message.dateRead)})</span>
             ) : (<div></div>)}
 
             <div className='flex'>
