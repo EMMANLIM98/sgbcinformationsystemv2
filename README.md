@@ -41,3 +41,27 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 2. npx prisma db push
 3. npx prisma db seed
 4. npx prisma studio
+
+
+## Third Party Libraries Used
+=> React
+=> NextJS
+=> NextApp
+=> Tailwind CSS
+=> HeroUI
+=> React Hook
+=> NextAuth V5
+=> Prisma ORM
+=> Zod
+=> React Toastify
+=> Cloudinary
+=> Clsx
+=> Pusher
+
+
+## Downgrade to Tailwind CSS v3 and Upgrade to Tailwind CSS v4:
+1. npm uninstall tailwindcss
+2. npm install -D tailwindcss@3
+3. npx tailwindcss init -p
+4. then upgrade to the latest version
+5. npm install -D tailwindcss@latest
