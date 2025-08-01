@@ -2,14 +2,29 @@ import { deleteMessage } from "@/app/actions/messageActions";
 import { MessageDto } from "@/types";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Key } from "readline";
+import useMessageStore from "./useMessageStore";
+import { useShallow } from "zustand/shallow";
 
-export const useMessages = (messages: MessageDto[]) => {
+export const useMessages = (initialMessages: MessageDto[]) => {
+    const { set, remove, messages } = useMessageStore(useShallow(state => ({
+        set: state.set,
+        remove: state.remove,
+        state: state.messages
+    })));
     const searchParams = useSearchParams();
     const router = useRouter();
     const isOutbox = searchParams.get('container') === 'outbox';
-    const [isDeleting, setIsDeleting] = useState({ id: '', loading: false })
+    const [isDeleting, setIsDeleting] = useState({ id: '', loading: false });
+
+    useEffect(() => {
+        set(initialMessages);
+        
+        return () => {
+            set([]);
+        }
+    }, [initialMessages, set]);
 
     const columns = [
         { key: isOutbox ? 'recipientFirstName' : 'senderFirstName', label: isOutbox ? 'Recipient' : 'Sender' },
@@ -36,6 +51,7 @@ export const useMessages = (messages: MessageDto[]) => {
         columns,
         deleteMessage: handleDeleteMessage,
         selectRow: handleRowSelect,
-        isDeleting
+        isDeleting,
+        messages
     }
 }
