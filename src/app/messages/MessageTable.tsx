@@ -1,12 +1,13 @@
 'use client';
 
 import { MessageDto } from '@/types';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Card, Avatar, Button } from '@heroui/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Card, Button } from '@heroui/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Key, useCallback, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai';
 import { deleteMessage } from '../actions/messageActions';
 import { truncateString } from '@/lib/util';
+import PresenceAvatar from '@/components/PresenceAvatar';
 
 type Props = {
     messages: MessageDto[]
@@ -40,9 +41,9 @@ export default function MessageTable({ messages }: Props) {
             case 'senderFirstName':
                 return (
                     <div className={'flex items-center gap-2 cursor-pointer'}>
-                        <Avatar
-                            alt='Member Image'
-                            src={(isOutbox ? item.recipientImage : item.senderImage) || '/images/user.png'}
+                        <PresenceAvatar 
+                            userId={isOutbox ? item.recipientId ?? '' : item.senderId ?? ''}
+                            src={isOutbox ? item.recipientImage : item.senderImage}
                         />
                         <span>{cellValue}</span>
                     </div>
