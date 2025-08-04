@@ -26,7 +26,7 @@ export const useNotificationChannel = (userId: string | null) => {
         if (!channelRef.current) {
             channelRef.current = pusherClient.subscribe(`private-${userId}`);
 
-            channelRef.current.bind('new-message', handleNewMessage);
+            channelRef.current.bind('message:new', handleNewMessage);
         }
 
         return () => {

@@ -15,7 +15,7 @@ export default function NewMessageToast({ message }: Props) {
         <Link href={`/members/${message.senderId}/chat`} className='flex items-center'>
             <div className='mr-2'>
                 <Image
-                    src={transformImageUrl(message.senderId) || '/images/user.png'}
+                    src={transformImageUrl(message.senderImage) || '/images/user.png'}
                     height={50}
                     width={50}
                     alt='Sender Image'
