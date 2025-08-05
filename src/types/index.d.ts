@@ -43,3 +43,9 @@ type MessageDto = {
     recipientLastName?: string
     recipientImage?: string | null
 }
+
+type UserFilters = {
+    ageRange: number[]
+    orderBy: string
+    gender: string[]
+}

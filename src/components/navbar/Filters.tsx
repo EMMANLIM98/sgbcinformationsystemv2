@@ -1,12 +1,14 @@
 'use client';
 
 import { Button, Select, SelectItem, Slider } from '@heroui/react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react'
 import { FaMale, FaFemale } from 'react-icons/fa'
 
 export default function Filters() {
     const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const router = useRouter();
 
     const orderbyList = [
         { label: 'Last Active', value: 'updated' },
@@ -17,6 +19,12 @@ export default function Filters() {
         { label: 'male', icon: FaMale },
         { label: 'female', icon: FaFemale }
     ];
+
+    const handleAgeSelect = (value: number[]) => {
+        const params = new URLSearchParams(searchParams);
+        params.set('ageRange', value.join(','));
+        router.replace(`${pathname}?${params}`);
+    }
 
     if (pathname !== '/members') return null;
 
@@ -38,13 +46,15 @@ export default function Filters() {
                     ))}
                 </div>
                 <div className='flex flex-row items-center gap-2 w-1/4'>
-                    <Slider 
+                    <Slider
+                        aria-label='Slider for age selection'
                         label='Age Range'
                         color='secondary'
                         size='sm'
                         minValue={1}
                         maxValue={100}
                         defaultValue={[1, 100]}
+                        onChangeEnd={(value) => handleAgeSelect(value as number[])}
                     />
                 </div>
                 <div className='w-1/4'>

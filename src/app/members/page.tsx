@@ -2,12 +2,13 @@ import React from 'react'
 import { getMembers } from '../actions/memberActions'
 import MemberCard from './MemberCard'
 import { fetchCurrentUserLikeIds } from '../actions/likeActions';
-import { Pagination } from '@heroui/react';
 import PaginationComponent from '@/components/PaginationComponent';
+import { UserFilters } from '@/types';
 
 
-export default async function MembersPage() {
-  const members = await getMembers();
+export default async function MembersPage({searchParams}: {searchParams: Promise<UserFilters>}) {
+  const userFilters = await searchParams;
+  const members = await getMembers(userFilters);
   const likeIds = await fetchCurrentUserLikeIds();
 
   return (
