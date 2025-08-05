@@ -3,7 +3,6 @@ import { MessageDto } from '@/types'
 import { Image } from '@heroui/image'
 import Link from 'next/link'
 import React from 'react'
-import { toast } from 'react-toastify'
 
 type Props = {
     message: MessageDto
@@ -29,6 +28,6 @@ export default function NewMessageToast({ message }: Props) {
     )
 }
 
-export const newMessageToast = (message: MessageDto) => {
-    toast(<NewMessageToast message={message} />);
-}
+// export const newMessageToast = (message: MessageDto) => {
+//     toast(<NewMessageToast message={message} />);
+// }
