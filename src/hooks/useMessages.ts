@@ -8,10 +8,11 @@ import useMessageStore from "./useMessageStore";
 import { useShallow } from "zustand/shallow";
 
 export const useMessages = (initialMessages: MessageDto[]) => {
-    const { set, remove, messages } = useMessageStore(useShallow(state => ({
+    const { set, remove, messages, updateUnreadCount } = useMessageStore(useShallow(state => ({
         set: state.set,
         remove: state.remove,
-        messages: state.messages
+        messages: state.messages,
+        updateUnreadCount: state.updateUnreadCount
     })));
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -20,7 +21,7 @@ export const useMessages = (initialMessages: MessageDto[]) => {
 
     useEffect(() => {
         set(initialMessages);
-        
+
         return () => {
             set([]);
         }
@@ -36,9 +37,10 @@ export const useMessages = (initialMessages: MessageDto[]) => {
     const handleDeleteMessage = useCallback(async (message: MessageDto) => {
         setIsDeleting({ id: message.id, loading: true });
         await deleteMessage(message.id, isOutbox);
-        router.refresh();
+        remove(message.id);
+        if (!message.dateRead && !isOutbox) updateUnreadCount(-1);
         setIsDeleting({ id: '', loading: false });
-    }, [isOutbox, router]);
+    }, [isOutbox, remove, updateUnreadCount]);
 
     const handleRowSelect = (key: Key) => {
         const message = messages.find((m: MessageDto) => m.id === key);
