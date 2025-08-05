@@ -11,7 +11,7 @@ export const useMessages = (initialMessages: MessageDto[]) => {
     const { set, remove, messages } = useMessageStore(useShallow(state => ({
         set: state.set,
         remove: state.remove,
-        state: state.messages
+        messages: state.messages
     })));
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -41,7 +41,7 @@ export const useMessages = (initialMessages: MessageDto[]) => {
     }, [isOutbox, router]);
 
     const handleRowSelect = (key: Key) => {
-        const message = messages.find(m => m.id === key);
+        const message = messages.find((m: MessageDto) => m.id === key);
         const url = isOutbox ? `/members/${message?.recipientId}` : `/members/${message?.senderId}`;
         router.push(url + '/chat')
     }
