@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Select, SelectItem, Slider } from '@heroui/react';
+import { Button, Select, SelectItem, Slider, Selection } from '@heroui/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react'
 import { FaMale, FaFemale } from 'react-icons/fa'
@@ -24,6 +24,14 @@ export default function Filters() {
         const params = new URLSearchParams(searchParams);
         params.set('ageRange', value.join(','));
         router.replace(`${pathname}?${params}`);
+    }
+
+    const handleOrderSelect = (value: Selection) => {
+        if (value instanceof Set) {
+            const params = new URLSearchParams(searchParams);
+            params.set('orderBy', value.values().next().value as string);
+            router.replace(`${pathname}?${params}`);
+        }
     }
 
     if (pathname !== '/members') return null;
@@ -61,15 +69,17 @@ export default function Filters() {
                     <Select
                         size='sm'
                         fullWidth
-                        placeholder='Order By'
+                        label='Order By'
                         variant='bordered'
                         color='secondary'
                         aria-label='Order by selector'
+                        selectedKeys={new Set([searchParams.get('orderBy') || 'updated'])}
+                        onSelectionChange={handleOrderSelect}
                     >
                         {orderbyList.map(item => (
                             <SelectItem key={item.value}>
                                 {item.label}
-                            </SelectItem> 
+                            </SelectItem>
                         ))}
                     </Select>
                 </div>
