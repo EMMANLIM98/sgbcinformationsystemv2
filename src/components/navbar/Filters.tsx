@@ -1,50 +1,13 @@
 'use client';
 
-import { Button, Select, SelectItem, Slider, Selection } from '@heroui/react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useFilters } from '@/hooks/useFilters';
+import { Button, Select, SelectItem, Slider } from '@heroui/react';
+import { usePathname } from 'next/navigation';
 import React from 'react'
-import { FaMale, FaFemale } from 'react-icons/fa'
 
 export default function Filters() {
     const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const router = useRouter();
-
-    const orderbyList = [
-        { label: 'Last Active', value: 'updated' },
-        { label: 'Newest Members', value: 'created' }
-    ];
-
-    const genders = [
-        { label: 'male', icon: FaMale },
-        { label: 'female', icon: FaFemale }
-    ];
-
-    const selectedGender = searchParams.get('gender')?.split(',') || ['male', 'female'];
-
-    const handleAgeSelect = (value: number[]) => {
-        const params = new URLSearchParams(searchParams);
-        params.set('ageRange', value.join(','));
-        router.replace(`${pathname}?${params}`);
-    }
-
-    const handleOrderSelect = (value: Selection) => {
-        if (value instanceof Set) {
-            const params = new URLSearchParams(searchParams);
-            params.set('orderBy', value.values().next().value as string);
-            router.replace(`${pathname}?${params}`);
-        }
-    }
-
-    const handleGenderSelect = (value: string) => {
-        const params = new URLSearchParams(searchParams);
-        if (selectedGender.includes(value)) {
-            params.set('gender', selectedGender.filter(g => g !== value).toString());
-        } else {
-            params.set('gender', [...selectedGender, value].toString());
-        }
-        router.replace(`${pathname}?${params}`);
-    }
+    const { orderbyList, genderList, selectAge, selectGender, selectOrder, filters } = useFilters();
 
     if (pathname !== '/members') return null;
 
@@ -54,13 +17,13 @@ export default function Filters() {
                 <div className='text-secondary font-semibold text-xl'>Results: 10</div>
                 <div className='flex gap-2 items-center'>
                     <div>Gender:</div>
-                    {genders.map(({ icon: Icon, label }) => (
+                    {genderList.map(({ icon: Icon, label }) => (
                         <Button
                             key={label}
                             size='sm'
                             isIconOnly
-                            color={selectedGender.includes(label) ? 'secondary' : 'default'}
-                            onPress={() => handleGenderSelect(label)}
+                            color={filters.gender.includes(label) ? 'secondary' : 'default'}
+                            onPress={() => selectGender(label)}
                         >
                             <Icon size={24} />
                         </Button>
@@ -74,8 +37,8 @@ export default function Filters() {
                         size='sm'
                         minValue={1}
                         maxValue={100}
-                        defaultValue={[1, 100]}
-                        onChangeEnd={(value) => handleAgeSelect(value as number[])}
+                        defaultValue={filters.ageRange}
+                        onChangeEnd={(value) => selectAge(value as number[])}
                     />
                 </div>
                 <div className='w-1/4'>
@@ -86,8 +49,8 @@ export default function Filters() {
                         variant='bordered'
                         color='secondary'
                         aria-label='Order by selector'
-                        selectedKeys={new Set([searchParams.get('orderBy') || 'updated'])}
-                        onSelectionChange={handleOrderSelect}
+                        selectedKeys={new Set([filters.orderBy])}
+                        onSelectionChange={selectOrder}
                     >
                         {orderbyList.map(item => (
                             <SelectItem key={item.value}>

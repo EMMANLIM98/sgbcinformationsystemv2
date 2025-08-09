@@ -1,0 +1,59 @@
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { FaMale, FaFemale } from "react-icons/fa";
+import useFilterStore from "./useFilterStore";
+import { useEffect } from "react";
+import { Selection } from "@heroui/react";
+
+export const useFilters = () => {
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    const { filters, setFilters } = useFilterStore();
+
+    const { ageRange, gender, orderBy } = filters;
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams();
+
+        if (gender) searchParams.set('gender', gender.join(','));
+        if (ageRange) searchParams.set('ageRange', ageRange.toString());
+        if (orderBy) searchParams.set('orderBy', orderBy);
+
+        router.replace(`${pathname}?${searchParams}`);
+    }, [ageRange, gender, orderBy, pathname, router])
+
+    const orderbyList = [
+        { label: 'Last Active', value: 'updated' },
+        { label: 'Newest Members', value: 'created' }
+    ];
+
+    const genderList = [
+        { label: 'male', icon: FaMale },
+        { label: 'female', icon: FaFemale }
+    ];
+
+    const handleAgeSelect = (value: number[]) => {
+        setFilters('ageRange', value);
+    }
+
+    const handleOrderSelect = (value: Selection) => {
+        if (value instanceof Set) {
+            setFilters('orderBy', value.values().next().value);
+        }
+    }
+
+    const handleGenderSelect = (value: string) => {
+        if (gender.includes(value)) setFilters('gender', gender.filter(g => g !== value));
+        else setFilters('gender', [...gender, value]);
+    }
+
+    return {
+        orderbyList,
+        genderList,
+        selectAge: handleAgeSelect,
+        selectGender: handleGenderSelect,
+        selectOrder: handleOrderSelect,
+        filters
+    }
+}
