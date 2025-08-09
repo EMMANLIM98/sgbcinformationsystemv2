@@ -3,6 +3,7 @@ import { FaMale, FaFemale } from "react-icons/fa";
 import useFilterStore from "./useFilterStore";
 import { useEffect, useTransition } from "react";
 import { Selection } from "@heroui/react";
+import usePaginationStore from "./usePaginationStore";
 
 export const useFilters = () => {
     const pathname = usePathname();
@@ -11,6 +12,11 @@ export const useFilters = () => {
     const [isPending, startTransition] = useTransition();
 
     const { filters, setFilters } = useFilterStore();
+
+    const {pageNumber, pageSize} = usePaginationStore(state => ({
+        pageNumber: state.pagination.pageNumber,
+        pageSize: state.pagination.pageSize
+    }));
 
     const { ageRange, gender, orderBy } = filters;
 
@@ -21,10 +27,12 @@ export const useFilters = () => {
             if (gender) searchParams.set('gender', gender.join(','));
             if (ageRange) searchParams.set('ageRange', ageRange.toString());
             if (orderBy) searchParams.set('orderBy', orderBy);
+            if (pageSize) searchParams.set('pageSize', pageSize.toString());
+            if (pageNumber) searchParams.set('pageNumber', pageNumber.toString());
 
             router.replace(`${pathname}?${searchParams}`);
         });
-    }, [ageRange, gender, orderBy, pathname, router])
+    }, [ageRange, gender, orderBy, pathname, router, pageNumber, pageSize])
 
     const orderbyList = [
         { label: 'Last Active', value: 'updated' },
