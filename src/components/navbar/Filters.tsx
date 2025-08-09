@@ -1,16 +1,20 @@
 'use client';
 
 import { useFilters } from '@/hooks/useFilters';
-import { Button, Select, SelectItem, Slider } from '@heroui/react';
+import { Button, Select, SelectItem, Slider, Spinner } from '@heroui/react';
 import React from 'react'
 
 export default function Filters() {
-    const { orderbyList, genderList, selectAge, selectGender, selectOrder, filters } = useFilters();
+    const { orderbyList, genderList, selectAge, selectGender, selectOrder, filters, isPending } = useFilters();
 
     return (
         <div className='shadow-md py-2'>
             <div className='flex flex-row justify-around items-center'>
-                <div className='text-secondary font-semibold text-xl'>Results: 10</div>
+                <div className='flex gap-2 items-center'>
+                    <div className='text-secondary font-semibold text-xl'>Results: 10</div>
+                    {isPending && <Spinner size='sm' color='secondary' />}
+                </div>
+
                 <div className='flex gap-2 items-center'>
                     <div>Gender:</div>
                     {genderList.map(({ icon: Icon, label }) => (
