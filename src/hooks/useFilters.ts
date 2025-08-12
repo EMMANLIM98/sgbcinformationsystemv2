@@ -14,12 +14,13 @@ export const useFilters = () => {
 
     const { filters, setFilters } = useFilterStore();
 
-    const { pageNumber, pageSize, setPage } = usePaginationStore(
+    const { pageNumber, pageSize, setPage, totalCount } = usePaginationStore(
         useShallow(
             state => ({
                 pageNumber: state.pagination.pageNumber,
                 pageSize: state.pagination.pageSize,
-                setPage: state.setPage
+                setPage: state.setPage,
+                totalCount: state.pagination.totalCount
             })));
 
     const { ageRange, gender, orderBy } = filters;
@@ -76,6 +77,7 @@ export const useFilters = () => {
         selectGender: handleGenderSelect,
         selectOrder: handleOrderSelect,
         filters,
-        isPending
+        isPending,
+        totalCount
     }
 }

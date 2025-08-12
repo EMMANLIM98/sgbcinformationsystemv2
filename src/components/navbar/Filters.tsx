@@ -5,14 +5,16 @@ import { Button, Select, SelectItem, Slider, Spinner } from '@heroui/react';
 import React from 'react'
 
 export default function Filters() {
-    const { orderbyList, genderList, selectAge, selectGender, selectOrder, filters, isPending } = useFilters();
+    const { orderbyList, genderList, selectAge, selectGender, selectOrder, filters, isPending, totalCount } = useFilters();
 
     return (
         <div className='shadow-md py-2'>
             <div className='flex flex-row justify-around items-center'>
                 <div className='flex gap-2 items-center'>
-                    <div className='text-secondary font-semibold text-xl'>Results: 10</div>
-                    {isPending && <Spinner size='sm' color='secondary' />}
+                    <div className='text-secondary font-semibold text-xl'>
+                        Results: {isPending ? <Spinner size='sm' color='secondary' /> : totalCount}
+                    </div>
+
                 </div>
 
                 <div className='flex gap-2 items-center'>
