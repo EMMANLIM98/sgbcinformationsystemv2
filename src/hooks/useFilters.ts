@@ -4,6 +4,7 @@ import useFilterStore from "./useFilterStore";
 import { useEffect, useTransition } from "react";
 import { Selection } from "@heroui/react";
 import usePaginationStore from "./usePaginationStore";
+import { useShallow } from "zustand/shallow";
 
 export const useFilters = () => {
     const pathname = usePathname();
@@ -13,12 +14,21 @@ export const useFilters = () => {
 
     const { filters, setFilters } = useFilterStore();
 
-    const {pageNumber, pageSize} = usePaginationStore(state => ({
-        pageNumber: state.pagination.pageNumber,
-        pageSize: state.pagination.pageSize
-    }));
+    const { pageNumber, pageSize, setPage } = usePaginationStore(
+        useShallow(
+            state => ({
+                pageNumber: state.pagination.pageNumber,
+                pageSize: state.pagination.pageSize,
+                setPage: state.setPage
+            })));
 
     const { ageRange, gender, orderBy } = filters;
+
+    useEffect(() => {
+        if (gender || ageRange || orderBy) {
+            setPage(1);
+        }
+    }, [gender, ageRange, orderBy, setPage])
 
     useEffect(() => {
         startTransition(() => {
