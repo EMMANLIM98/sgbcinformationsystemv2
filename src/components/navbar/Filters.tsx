@@ -1,11 +1,11 @@
 'use client';
 
 import { useFilters } from '@/hooks/useFilters';
-import { Button, Select, SelectItem, Slider, Spinner } from '@heroui/react';
+import { Button, Select, SelectItem, Slider, Spinner, Switch } from '@heroui/react';
 import React from 'react'
 
 export default function Filters() {
-    const { orderbyList, genderList, selectAge, selectGender, selectOrder, filters, isPending, totalCount } = useFilters();
+    const { orderbyList, genderList, selectAge, selectGender, selectOrder, filters, isPending, totalCount, selectWithPhoto } = useFilters();
 
     return (
         <div className='shadow-md py-2'>
@@ -41,6 +41,15 @@ export default function Filters() {
                         maxValue={100}
                         defaultValue={filters.ageRange}
                         onChangeEnd={(value) => selectAge(value as number[])}
+                    />
+                </div>
+                <div className='flex flex-col items-center'>
+                    <p className='text-sm'>With Photo</p>
+                    <Switch 
+                        color='secondary'
+                        defaultSelected
+                        size='sm'
+                        onChange={selectWithPhoto}
                     />
                 </div>
                 <div className='w-1/4'>

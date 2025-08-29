@@ -6,12 +6,13 @@ import { GetMemberParams, PaginatedResponse, UserFilters } from "@/types";
 import { addYears } from "date-fns";
 import { getAuthUserId } from "./authActions";
 
-export async function getMembers({ 
+export async function getMembers({
     ageRange = '1, 100',
     gender = 'male,female',
     pageNumber = '1',
     pageSize = '10',
-    orderBy = 'updated'
+    orderBy = 'updated',
+    withPhoto = 'true'
 }: GetMemberParams): Promise<PaginatedResponse<Member>> {
     const userId = await getAuthUserId();
 
@@ -33,7 +34,8 @@ export async function getMembers({
                 AND: [
                     { dateOfBirth: { gte: minDob } },
                     { dateOfBirth: { lte: maxDob } },
-                    { gender: { in: selectedGender } }
+                    { gender: { in: selectedGender } },
+                    ...(withPhoto === 'true' ? [{ image: { not: null } }] : [])
                 ],
                 NOT: {
                     userId
@@ -46,7 +48,8 @@ export async function getMembers({
                 AND: [
                     { dateOfBirth: { gte: minDob } },
                     { dateOfBirth: { lte: maxDob } },
-                    { gender: { in: selectedGender } }
+                    { gender: { in: selectedGender } },
+                    ...(withPhoto === 'true' ? [{ image: { not: null } }] : [])
                 ],
                 NOT: {
                     userId
