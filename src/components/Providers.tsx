@@ -22,7 +22,7 @@ export default function Providers({ children, userId }: { children: React.ReactN
     }
   }, [setUnreadCount, userId]);
 
-  usePresenceChannel();
+  usePresenceChannel(userId);
   useNotificationChannel(userId);
   return (
     <HeroUIProvider>
