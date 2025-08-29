@@ -1,22 +1,29 @@
 'use client';
 
 import { registerUser } from '@/app/actions/authActions';
-import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
+import { profileSchema, RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
 import { handleFormServerErrors } from '@/lib/util';
 import { Card, CardHeader, CardBody, Input, Button } from '@heroui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react'
+import React, { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form';
 import { GiPadlock } from 'react-icons/gi';
 import UserDetailsForm from './UserDetailsForm';
+import ProfileForm from './ProfileForm';
+
+const stepSchemas = [registerSchema, profileSchema];
 
 export default function RegisterForm() {
+    const [activeStep, setActiveStep] = useState(0);
+    const currentValidationSchema = stepSchemas[activeStep];
+
+
     const methods = useForm<RegisterSchema>({
-        resolver: zodResolver(registerSchema),
+        resolver: zodResolver(currentValidationSchema),
         mode: 'onTouched',
     });
 
-    const {handleSubmit, setError, getValues, formState: { errors, isValid, isSubmitting }} = methods;
+    const { handleSubmit, setError, getValues, formState: { errors, isValid, isSubmitting } } = methods;
 
     const onSubmit = async (getValues) => {
         console.log(getValues());
@@ -27,6 +34,29 @@ export default function RegisterForm() {
         // } else {
         //     handleFormServerErrors(result, setError);
         // }
+    }
+
+    const getStepContent = (step: number) => {
+        switch (step) {
+            case 0:
+                return <UserDetailsForm />;
+            case 1:
+                return <ProfileForm />;
+            default:
+                return 'Unknown step';
+        }
+    }
+
+    const onBack = () => {
+        setActiveStep(prev => prev - 1);
+    }
+
+    const onNext = async () => {
+        if (activeStep === stepSchemas.length - 1) {
+            await onSubmit();
+        } else {
+            setActiveStep(prev => prev + 1);
+        }
     }
 
     return (
@@ -42,15 +72,22 @@ export default function RegisterForm() {
             </CardHeader>
             <CardBody>
                 <FormProvider {...methods}>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(onNext)}>
                         <div className='space-y-4'>
-                            <UserDetailsForm />
+                            {getStepContent(activeStep)}
                             {errors.root?.serverError && (
                                 <p className='text-danger text-sm'>{errors.root.serverError.message}</p>
                             )}
-                            <Button isLoading={isSubmitting} isDisabled={!isValid} fullWidth color='primary' type='submit'>
-                                Register
-                            </Button>
+                            <div className='flex flex-row items-center gap-6'>
+                                {activeStep !== 0 && (
+                                    <Button onPress={onBack} fullWidth>
+                                        Back
+                                    </Button>
+                                )}
+                                <Button isLoading={isSubmitting} isDisabled={!isValid} fullWidth color='primary' type='submit'>
+                                    {activeStep === stepSchemas.length - 1 ? 'Submit' : 'Continue'}
+                                </Button>
+                            </div>
                         </div>
                     </form>
                 </FormProvider>
