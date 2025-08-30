@@ -24,8 +24,8 @@ export default function RegisterForm() {
     });
 
     const { handleSubmit, setError, getValues, formState: { errors, isValid, isSubmitting } } = methods;
-
-    const onSubmit = async (getValues) => {
+    
+    const onSubmit = async () => {
         console.log(getValues());
         // const result = await registerUser(data);
 
