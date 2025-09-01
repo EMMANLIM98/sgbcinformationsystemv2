@@ -11,11 +11,19 @@ export default function UserDetailsForm() {
     <div className='space-y-4'>
       <Input
         defaultValue=''
-        label='Name'
+        label='Firstname'
         variant='bordered'
-        {...register('name')}
-        isInvalid={!!errors.name}
-        errorMessage={errors.name?.message as string}
+        {...register('firstname')}
+        isInvalid={!!errors.firstname}
+        errorMessage={errors.firstname?.message as string}
+      />
+      <Input
+        defaultValue=''
+        label='Lastname'
+        variant='bordered'
+        {...register('lastname')}
+        isInvalid={!!errors.lastname}
+        errorMessage={errors.lastname?.message as string}
       />
       <Input
         defaultValue=''

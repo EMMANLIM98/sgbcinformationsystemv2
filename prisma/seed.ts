@@ -30,7 +30,8 @@ async function seedMembers() {
             },
             user: {
                 create: {
-                    name: member.firstName + " " + member.lastName,
+                    firstName: member.firstName,
+                    lastName: member.lastName,
                     email: member.email,
                     passwordHash: await hash("Password", 14),
                     image: member.image

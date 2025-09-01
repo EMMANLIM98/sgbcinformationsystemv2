@@ -3,11 +3,12 @@
 import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { LoginSchema } from "@/lib/schemas/loginSchema";
-import { registerSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
+import { combinedRegisterSchema, registerSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
 import { ActionResult } from "@/types";
 import { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
+import { date } from "zod";
 import { ZodIssue } from "zod/v3";
 
 export async function signInUser(data: LoginSchema): Promise<ActionResult<string>> {
@@ -41,13 +42,13 @@ export async function signOutUser() {
 
 export async function registerUser(data: RegisterSchema): Promise<ActionResult<User>> {
     try {
-        const validated = registerSchema.safeParse(data);
+        const validated = combinedRegisterSchema.safeParse(data);
 
         if (!validated.success) {
             return { status: 'error', error: validated.error.issues as ZodIssue[] };
         }
 
-        const { name, email, password } = validated.data;
+        const { firstname, lastname, email, password, gender, description, city, country, dateOfBirth } = validated.data;
 
         const hashedPassword = await bcrypt.hash(password, 14);
 
@@ -61,9 +62,20 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
 
         const user = await prisma.user.create({
             data: {
-                name: name,
+                name: `${firstname} ${lastname}`,
                 email: email,
-                passwordHash: hashedPassword
+                passwordHash: hashedPassword,
+                Member: {
+                    create:{
+                        firstName: firstname,
+                        lastName: lastname,
+                        description,
+                        city,
+                        country,
+                        dateOfBirth: new Date(dateOfBirth),
+                        gender
+                    }
+                }
             }
         })
 

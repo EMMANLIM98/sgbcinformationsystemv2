@@ -2,7 +2,8 @@ import {z} from 'zod/v3';
 import { calculateAge } from '../util';
 
 export const registerSchema = z.object({
-    name: z.string().min(3),
+    firstname: z.string().min(3),
+    lastname: z.string().min(3),
     email: z.string().email(),
     password: z.string().min(6, {
         message: 'Password must be at least 6 characters long',
@@ -22,6 +23,8 @@ export const profileSchema = z.object({
     }, {
         message: 'You must be at least 1 year old',
     })
-})
+});
+
+export const combinedRegisterSchema = registerSchema.and(profileSchema);
 
 export type RegisterSchema = z.infer<typeof registerSchema & typeof profileSchema>
