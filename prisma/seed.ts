@@ -34,7 +34,8 @@ async function seedMembers() {
                     lastName: member.lastName,
                     email: member.email,
                     passwordHash: await hash("Password", 14),
-                    image: member.image
+                    image: member.image,
+                    profileComplete: true
                 }
             }
         }
