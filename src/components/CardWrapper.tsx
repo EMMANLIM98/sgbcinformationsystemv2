@@ -1,6 +1,5 @@
-'use client';
-
-import { Card, CardHeader, CardBody, Button, CardFooter } from '@heroui/react';
+import { Card, CardHeader, CardBody, CardFooter } from '@heroui/card';
+import { Button } from '@heroui/button';
 import React, { ReactNode } from 'react'
 import { GiPadlock } from 'react-icons/gi';
 import { IconType } from 'react-icons/lib';
@@ -11,10 +10,11 @@ type Props = {
     headerText: string
     subHeaderText?: string
     action?: () => void
-    actionLabel: string
+    actionLabel?: string
+    footer?: ReactNode
 }
 
-export default function CardWrapper({ body, headerIcon: Icon, headerText, subHeaderText, action, actionLabel }: Props) {
+export default function CardWrapper({ body, footer, headerIcon: Icon, headerText, subHeaderText, action, actionLabel }: Props) {
     return (
         <div className='flex items-center justify-center vertical-center'>
             <Card className='w-2/5 mx-auto p-5'>
@@ -32,13 +32,16 @@ export default function CardWrapper({ body, headerIcon: Icon, headerText, subHea
                     <CardBody>
                         {body}
                     </CardBody>}
-                    <CardFooter>
-                        {action && (
-                            <Button onPress={action} fullWidth color='secondary' variant='bordered'>
-                                {actionLabel}
-                            </Button>
-                        )}
-                    </CardFooter>
+                <CardFooter>
+                    {action && (
+                        <Button onPress={action} fullWidth color='secondary' variant='bordered'>
+                            {actionLabel}
+                        </Button>
+                    )}
+                    {footer && (
+                        <>{footer}</>
+                    )}
+                </CardFooter>
             </Card>
         </div>
     )
