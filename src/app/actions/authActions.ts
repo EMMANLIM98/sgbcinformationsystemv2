@@ -1,7 +1,7 @@
 'use server';
 
 import { auth, signIn, signOut } from "@/auth";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendPasswordResetEmail, sendVerificationEmail } from "@/lib/mail";
 import { prisma } from "@/lib/prisma";
 import { LoginSchema } from "@/lib/schemas/loginSchema";
 import { combinedRegisterSchema, registerSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
@@ -158,5 +158,25 @@ export async function verifyEmail(token: string): Promise<ActionResult<string>> 
     } catch (error) {
         console.log(error);
         throw error;
+    }
+}
+
+export async function generateResetPasswordEmail(email: string): Promise<ActionResult<string>> {
+    try {
+        const existingUser = await getUserByEmail(email);
+
+        if (!existingUser) {
+            return { status: 'error', error: 'Email not found.' };
+        }
+
+        const token = await generateToken(email, TokenType.PASSWORD_RESET);
+
+        await sendPasswordResetEmail(token.email.toLowerCase(), token.token);
+
+        return {status: 'success', data: 'Password reset email has been sent. Please check your email.'}
+        
+    } catch (error) {
+        console.log(error);
+        return { status: 'error', error: 'Something went wrong.' };
     }
 }
