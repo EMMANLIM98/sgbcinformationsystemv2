@@ -1,6 +1,7 @@
 'use server';
 
 import { auth, signIn, signOut } from "@/auth";
+import { sendVerificationEmail } from "@/lib/mail";
 import { prisma } from "@/lib/prisma";
 import { LoginSchema } from "@/lib/schemas/loginSchema";
 import { combinedRegisterSchema, registerSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
@@ -9,7 +10,6 @@ import { ActionResult } from "@/types";
 import { TokenType, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
-import { date } from "zod";
 import { ZodIssue } from "zod/v3";
 
 export async function signInUser(data: LoginSchema): Promise<ActionResult<string>> {
@@ -24,7 +24,7 @@ export async function signInUser(data: LoginSchema): Promise<ActionResult<string
         if (!existingUser.emailVerified) {
             const token = await generateToken(existingUser.email, TokenType.VERIFICATION);
 
-            //Send email
+            await sendVerificationEmail(token.email.toLowerCase(), token.token);
 
             return {status: 'error', error: 'Please verify your email address before logging in.'}
         }
@@ -86,6 +86,7 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
                     create:{
                         firstName: firstname,
                         lastName: lastname,
+                        email: email,
                         description,
                         city,
                         country,
@@ -98,7 +99,7 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
 
         const verificationToken = await generateToken(email, TokenType.VERIFICATION);
 
-        //Send email
+        await sendVerificationEmail(verificationToken.email.toLowerCase(), verificationToken.token);
 
         return { status: 'success', data: user }
     } catch (error) {
