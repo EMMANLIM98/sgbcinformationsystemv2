@@ -69,7 +69,7 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
         const hashedPassword = await bcrypt.hash(password, 14);
 
         const existingUser = await prisma.user.findUnique({
-            where: { email: email }
+            where: { email: email.toLowerCase() }
         })
 
         if (existingUser) {
@@ -80,13 +80,13 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
             data: {
                 firstName: firstname,
                 lastName: lastname,
-                email: email,
+                email: email.toLowerCase(),
                 passwordHash: hashedPassword,
                 Member: {
                     create:{
                         firstName: firstname,
                         lastName: lastname,
-                        email: email,
+                        email: email.toLowerCase(),
                         description,
                         city,
                         country,
@@ -110,7 +110,7 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
 
 export async function getUserByEmail(email: string) {
     return await prisma.user.findUnique({
-        where: { email: email }
+        where: { email: email.toLowerCase() }
     })
 }
 

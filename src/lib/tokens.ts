@@ -5,7 +5,7 @@ import { prisma } from "./prisma";
 export async function getTokenByEmail(email: string) {
     try {
         return prisma.token.findFirst({
-            where: { email }
+            where: { email: email.toLowerCase() }
         })
     } catch (error) {
         console.log(error);
@@ -27,7 +27,7 @@ export async function generateToken(email: string, type: TokenType) {
 
     return prisma.token.create({
         data: {
-            email,
+            email: email.toLowerCase(),
             token,
             type,
             expires

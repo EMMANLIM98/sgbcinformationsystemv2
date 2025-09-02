@@ -21,7 +21,8 @@ export async function updateMemberProfile(data: MemberEditSchema, nameUpdated: b
             await prisma.user.update({
                 where: { id: userId },
                 data: {
-                    name: `${firstName} ${lastName}`
+                    firstName: firstName,
+                    lastName: lastName
                 }
             });
         }
@@ -105,7 +106,7 @@ export async function getUserInfoForNav() {
         const userId = await getAuthUserId();
         return prisma.user.findUnique({
             where: { id: userId },
-            select: { name: true, image: true }
+            select: { firstName: true, lastName: true, image: true }
         })
     } catch (error) {
         console.log(error);
