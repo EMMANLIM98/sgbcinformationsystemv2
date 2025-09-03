@@ -108,6 +108,7 @@ model User {
   passwordHash    String?
   image           String?
   profileComplete Boolean   @default(false)
+  role            Role      @default(MEMBER)
   accounts        Account[]
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -188,4 +189,9 @@ model Token {
 enum TokenType {
   VERIFICATION
   PASSWORD_RESET
+}
+
+enum Role {
+  ADMIN
+  MEMBER
 }

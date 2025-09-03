@@ -41,6 +41,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 2. npx prisma db push
 3. npx prisma db seed
 4. npx prisma studio
+5. npx prisma migrate dev -n Initial --create-only
+6. npx prisma migrate reset
 
 
 ## Third Party Libraries Used
