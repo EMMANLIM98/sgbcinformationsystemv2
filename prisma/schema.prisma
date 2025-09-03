@@ -100,11 +100,12 @@ model Account {
 
 model User {
   id              String    @id @default(cuid())
+  name            String?
   firstName       String?
   lastName        String?
   email           String    @unique
   emailVerified   DateTime?
-  passwordHash    String
+  passwordHash    String?
   image           String?
   profileComplete Boolean   @default(false)
   accounts        Account[]
@@ -116,6 +117,7 @@ model User {
 model Member {
   id                 String    @id @default(cuid())
   userId             String    @unique
+  name               String?
   firstName          String
   lastName           String
   email              String?   @unique

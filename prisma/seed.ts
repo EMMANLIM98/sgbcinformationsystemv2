@@ -9,6 +9,7 @@ async function seedMembers() {
         data: {
             email: member.email,
             emailVerified: new Date(),
+            name: `${member.firstName} ${member.lastName}`,
             firstName: member.firstName,
             lastName: member.lastName,
             image: member.image,
@@ -30,6 +31,7 @@ async function seedMembers() {
             },
             user: {
                 create: {
+                    name: `${member.firstName} ${member.lastName}`,
                     firstName: member.firstName,
                     lastName: member.lastName,
                     email: member.email,
