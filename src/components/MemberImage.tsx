@@ -5,12 +5,16 @@ import { CldImage } from 'next-cloudinary';
 import React from 'react';
 import { Image } from '@heroui/image';
 import clsx from 'clsx';
+import { useRole } from '@/hooks/useRole';
+import { Button } from '@heroui/react';
+import { ImCheckmark, ImCross } from 'react-icons/im';
 
 type Props = {
     photo: Photo | null;
 }
 
 export default function MemberImage({ photo }: Props) {
+    const role = useRole();
     return (
         <div>
             {photo?.publicId ? (
@@ -22,7 +26,7 @@ export default function MemberImage({ photo }: Props) {
                     crop='fill'
                     gravity='faces'
                     className={clsx('rounded-2xl',{
-                        'opacity-40': !photo.isApproved
+                        'opacity-40': !photo.isApproved && role !== 'ADMIN'
                     })}
                     priority
                 />
@@ -33,11 +37,21 @@ export default function MemberImage({ photo }: Props) {
                     alt='Image of user'
                 />
             )}
-            {!photo?.isApproved && (
+            {!photo?.isApproved && role !== 'ADMIN' && (
                 <div className='absolute bottom-2 w-full bg-slate-200 p-1'>
                     <div className='flex justify-center text-danger font-semibold'>
                         Awaiting Approval
                     </div>
+                </div>
+            )}
+            {role === 'ADMIN' && (
+                <div className='flex flex-row gap-2 mt-2'>
+                    <Button color='success' variant='bordered' fullWidth>
+                        <ImCheckmark size={20} />
+                    </Button>
+                    <Button color='danger' variant='bordered' fullWidth>
+                        <ImCross size={20} />
+                    </Button>
                 </div>
             )}
         </div>
