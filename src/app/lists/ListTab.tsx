@@ -1,11 +1,10 @@
 'use client';
 
-import { Tab, Tabs } from '@heroui/react';
+import { Spinner, Tab, Tabs } from '@heroui/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { Key, useTransition } from 'react'
 import MemberCard from '../members/MemberCard';
 import { Member } from '@prisma/client';
-import Loading from '@/components/Loading';
 
 type Props = {
     members: Member[];
@@ -16,7 +15,7 @@ export default function ListTab({ members, likeIds }: Props) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
-    const [ isPending, startTransition ] = useTransition();
+    const [isPending, startTransition] = useTransition();
 
     const tabs = [
         { id: 'source', label: 'Members I have liked' },
@@ -32,7 +31,8 @@ export default function ListTab({ members, likeIds }: Props) {
         });
     }
     return (
-        <div className='flex w-full flex-col mt-10 gap-5'>
+        <div className='flex w-full flex-col mt-10 gap-5 relative'>
+            {(isPending) && <Spinner color='secondary' className='absolute left-[480px]'/>}
             <Tabs
                 aria-label='Like Tabs'
                 items={tabs}
@@ -42,28 +42,23 @@ export default function ListTab({ members, likeIds }: Props) {
                 {
                     (item) => (
                         <Tab key={item.id} title={item.label}>
-                            {isPending ? (
-                                <Loading />
-
-                            ) : (
-                                <>
-                                    {
-                                        members.length > 0 ? (
-                                            <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8'>
-                                                {
-                                                    members.map(member => (
-                                                        <MemberCard key={member.id} member={member} likeIds={likeIds} />
-                                                    ))
-                                                }
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                No members for this filter.
-                                            </div>
-                                        )
-                                    }
-                                </>
-                            )}
+                            <>
+                                {
+                                    members.length > 0 && !isPending ? (
+                                        <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8'>
+                                            {
+                                                members.map(member => (
+                                                    <MemberCard key={member.id} member={member} likeIds={likeIds} />
+                                                ))
+                                            }
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            No members for this filter.
+                                        </div>
+                                    )
+                                }
+                            </>
                         </Tab>
                     )
                 }
