@@ -35,6 +35,7 @@ async function seedMembers() {
                     firstName: member.firstName,
                     lastName: member.lastName,
                     email: member.email,
+                    emailVerified: new Date(member.emailVerified),
                     passwordHash: await hash("Password", 14),
                     image: member.image,
                     profileComplete: true
@@ -50,7 +51,7 @@ async function seedAdmin() {
             email: 'admin@sgbcinformationsystem.com',
             emailVerified: new Date(),
             name: 'Admin',
-            passwordHash: await hash("SGBC1990_!!", 14),
+            passwordHash: await hash("Password", 14),
             role: 'ADMIN'
 
         }
