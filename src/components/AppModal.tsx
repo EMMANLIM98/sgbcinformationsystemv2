@@ -15,6 +15,12 @@ export default function AppModal({ isOpen, onClose, header, body, footerButtons 
             isOpen={isOpen}
             onClose={onClose}
             placement='top-center'
+            motionProps={{ 
+                variants: {
+                    enter: {y: 0, opacity: 100, transition: { duration: 0.3 }},
+                    exit: {y: 100, opacity: 0, transition: { duration: 0.3 }}
+                }
+            }}
         >
             <ModalContent>
                 <ModalHeader className='flex flex-col gap-1'>{header}</ModalHeader>
