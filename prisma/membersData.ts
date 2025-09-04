@@ -18,7 +18,7 @@ export const membersData = [
         city: "Greenbush",
         country: "Martinique",
         image: "/images/f1.jpeg",
-        emailVerified: "2025-09-04 05:08:42.93"
+        emailVerified: "2001-05-14 00:00:00.00"
     },
     {
         email: "karen@test.com",
@@ -37,7 +37,7 @@ export const membersData = [
         city: "Celeryville",
         country: "Grenada",
         image: "/images/f2.jpeg",
-        emailVerified: "2025-09-04 05:08:42.93"
+        emailVerified: "2001-05-14 00:00:00.00"
     },
     {
         email: "margo@test.com",
@@ -56,7 +56,7 @@ export const membersData = [
         city: "Rosewood",
         country: "Svalbard and Jan Mayen Islands",
         image: "/images/f3.jpeg",
-        emailVerified: "2025-09-04 05:08:42.93"
+        emailVerified: "2001-05-14 00:00:00.00"
     },
     {
         email: "lois@test.com",
@@ -75,7 +75,7 @@ export const membersData = [
         city: "Orviston",
         country: "Zimbabwe",
         image: "/images/f4.jpeg",
-        emailVerified: "2025-09-04 05:08:42.93"
+        emailVerified: "2001-05-14 00:00:00.00"
     },
     {
         email: "ruthie@test.com",
@@ -94,7 +94,7 @@ export const membersData = [
         city: "Germanton",
         country: "Antigua and Barbuda",
         image: "/images/f5.jpeg",
-        emailVerified: "2025-09-04 05:08:42.93"
+        emailVerified: "2001-05-14 00:00:00.00"
     },
     {
         email: "todd@test.com",
@@ -113,7 +113,7 @@ export const membersData = [
         city: "Cliff",
         country: "British Indian Ocean Territory",
         image: "/images/m1.jpeg",
-        emailVerified: "2025-09-04 05:08:42.93"
+        emailVerified: "2001-05-14 00:00:00.00"
     },
     {
         email: "porter@test.com",
@@ -132,7 +132,7 @@ export const membersData = [
         city: "Welda",
         country: "Christmas Island",
         image: "/images/m2.jpeg",
-        emailVerified: "2025-09-04 05:08:42.93"
+        emailVerified: "2001-05-14 00:00:00.00"
     },
     {
         email: "mayo@test.com",
@@ -151,7 +151,7 @@ export const membersData = [
         city: "Clarence",
         country: "Burkina Faso",
         image: "/images/m3.jpeg",
-        emailVerified: "2025-09-04 05:08:42.93"
+        emailVerified: "2001-05-14 00:00:00.00"
     },
     {
         email: "skinner@test.com",
@@ -170,7 +170,7 @@ export const membersData = [
         city: "Herald",
         country: "Poland",
         image: "/images/m4.jpeg",
-        emailVerified: "2025-09-04 05:08:42.93"
+        emailVerified: "2001-05-14 00:00:00.00"
     },
     {
         email: "davis@test.com",
@@ -189,6 +189,6 @@ export const membersData = [
         city: "Lupton",
         country: "Luxembourg",
         image: "/images/m5.jpeg",
-        emailVerified: "2025-09-04 05:08:42.93"
+        emailVerified: "2001-05-14 00:00:00.00"
     }
 ]
