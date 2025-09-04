@@ -43,6 +43,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 4. npx prisma studio
 5. npx prisma migrate dev -n Initial --create-only
 6. npx prisma migrate reset
+7. npx prisma migrate dev -n AddedIsApproved
+8. npx prisma migrate dev -n <NameOfChange>
 
 
 ## Third Party Libraries Used

@@ -147,6 +147,7 @@ model Photo {
   id       String   @id @default(cuid())
   url      String
   publicId String?
+  isApproved Boolean  @default(false)
   created  DateTime @default(now())
   updated  DateTime @default(now())
   memberId String

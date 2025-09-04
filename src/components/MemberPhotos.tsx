@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import DeleteButton from './DeleteButton';
 import MemberImage from './MemberImage';
 import StarButton from './StarButton';
+import { toast } from 'react-toastify';
 
 type Props = {
     photos: Photo[] | null
@@ -24,9 +25,16 @@ export default function MemberPhotos({ photos, editing, mainImageUrl }: Props) {
     const onSetMain = async (photo: Photo) => {
         if (photo.url === mainImageUrl) return null;
         setLoading({ isLoading: true, type: 'main', id: photo.id });
-        await setMainImage(photo);
-        router.refresh();
-        setLoading({ isLoading: false, type: '', id: '' });
+        try {
+            await setMainImage(photo);
+            router.refresh();
+        } catch (error: unknown) {
+            if (error instanceof Error) toast.error(error.message);
+            else toast.error('Something went wrong, please try again later.');
+        } finally {
+            setLoading({ isLoading: false, type: '', id: '' });
+        }
+
     }
     const onDelete = async (photo: Photo) => {
         if (photo.url === mainImageUrl) return null;
