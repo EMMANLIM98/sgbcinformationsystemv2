@@ -3,7 +3,7 @@ import { MessageDto } from "@/types";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Key } from "readline";
+import { Key } from "react";
 import useMessageStore from "./useMessageStore";
 import { useShallow } from "zustand/shallow";
 

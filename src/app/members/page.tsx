@@ -7,7 +7,7 @@ import { GetMemberParams } from '@/types';
 import EmptyState from '@/components/EmptyState';
 
 
-export default async function MembersPage({ searchParams }: { searchParams: GetMemberParams }) {
+export default async function MembersPage({ searchParams }: { searchParams: Promise<GetMemberParams> }) {
   const userFilters = await searchParams;
   const { items: members, totalCount } = await getMembers(userFilters);
   const likeIds = await fetchCurrentUserLikeIds();

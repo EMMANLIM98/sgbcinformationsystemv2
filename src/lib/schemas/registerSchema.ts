@@ -18,7 +18,7 @@ export const profileSchema = z.object({
     dateOfBirth: z.string().min(1, {
         message: 'Date of birth is required',
     }).refine(dateString => {
-        const age = calculateAge(new Date(dateString));
+        const age = Number(calculateAge(new Date(dateString)));
         return age >= 1;
     }, {
         message: 'You must be at least 1 year old',

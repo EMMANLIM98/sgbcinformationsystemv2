@@ -1,4 +1,4 @@
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FaMale, FaFemale } from "react-icons/fa";
 import useFilterStore from "./useFilterStore";
 import { ChangeEvent, useEffect, useTransition } from "react";
@@ -8,7 +8,6 @@ import { useShallow } from "zustand/shallow";
 
 export const useFilters = () => {
     const pathname = usePathname();
-    const searchParams = useSearchParams();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 

@@ -23,7 +23,7 @@ export default function AppModal({ isOpen, onClose, header, body, footerButtons,
             className={{
                 base: `${imageModal ? 'border-2 border-white' : ''}`,
                 body: `${imageModal ? 'p-0' : ''}`
-            }}
+            }.toString()}
             motionProps={{
                 variants: {
                     enter: { y: 0, opacity: 100, transition: { duration: 0.3 } },

@@ -6,7 +6,7 @@ import Link from 'next/link'
 import React from 'react'
 
 type Props = {
-    userInfo: {name: string | null, image: string | null} | null
+    userInfo: {firstName: string | null, lastName: string | null, image: string | null} | null
 }
 
 export default function UserMenu({userInfo}: Props) {
@@ -18,7 +18,7 @@ export default function UserMenu({userInfo}: Props) {
             as='button'
             className='transition-transform'
             color='secondary'
-            name={userInfo?.name || 'user avatar'}
+            name={userInfo?.firstName + ' ' + userInfo?.lastName || 'user avatar'}
             size='sm'
             src={transformImageUrl(userInfo?.image) || '/images/user.png'}
           />
@@ -26,7 +26,7 @@ export default function UserMenu({userInfo}: Props) {
         <DropdownMenu variant='flat' aria-label='User actions menu'>
           <DropdownSection showDivider>
             <DropdownItem key='signInAs' isReadOnly as='span' className='h-14 flex flex-row' aria-label='username'>
-              Signed in as {userInfo?.name}
+              Signed in as {userInfo?.firstName} {userInfo?.lastName}
             </DropdownItem>
           </DropdownSection>
           <DropdownItem key='editProfile' as={Link} href='/members/edit'>

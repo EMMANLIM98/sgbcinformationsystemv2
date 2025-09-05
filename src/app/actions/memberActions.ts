@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { GetMemberParams, PaginatedResponse, UserFilters } from "@/types";
 import { addYears } from "date-fns";
 import { getAuthUserId } from "./authActions";
+import { Member } from "@prisma/client";
 
 export async function getMembers({
     ageRange = '1, 100',

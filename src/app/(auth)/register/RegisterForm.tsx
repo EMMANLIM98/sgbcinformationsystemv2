@@ -1,7 +1,7 @@
 'use client';
 
 import { registerUser } from '@/app/actions/authActions';
-import { profileSchema, RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
+import { combinedRegisterSchema, profileSchema, RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
 import { handleFormServerErrors } from '@/lib/util';
 import { Card, CardHeader, CardBody, Input, Button } from '@heroui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,7 +12,7 @@ import UserDetailsForm from './UserDetailsForm';
 import ProfileForm from './ProfileForm';
 import { useRouter } from 'next/navigation';
 
-const stepSchemas = [registerSchema, profileSchema];
+const stepSchemas = [combinedRegisterSchema];
 
 export default function RegisterForm() {
     const router = useRouter();

@@ -4,8 +4,8 @@ import { CardBody, CardHeader } from '@heroui/card'
 import { Divider } from '@heroui/divider'
 import React from 'react'
 
-export default async function PhotosPage({ params }: { params: { userId: string } }) {
-    const { userId } = params;
+export default async function PhotosPage({ params }: { params: Promise<{ userId: string }> }) {
+    const { userId } = await params;
     console.log('userId', userId);
     const photos = await getMemberPhotosByUserId(userId);
 

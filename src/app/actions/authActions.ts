@@ -222,7 +222,7 @@ export async function resetPassword(password: string, token: string | null): Pro
     }
 }
 
-export async function completeSocialLoginProfile(data: RegisterSchema): Promise<ActionResult<string>> {
+export async function completeSocialLoginProfile(data: ProfileSchema): Promise<ActionResult<string>> {
     const session = await auth();
 
     if (!session?.user) return { status: 'error', error: 'User not found.' };
