@@ -101,7 +101,6 @@ export default function MemberImage({ photo }: Props) {
                         ) : (
                             <Image
                                 width={750}
-                                height={750}
                                 src={photo?.url || '/images/user.png'}
                                 alt='Image of user'
                             />
