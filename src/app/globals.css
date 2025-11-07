@@ -137,7 +137,7 @@
     }
 
     /* small-range fixes for Tailwind 'sm' band (640px - 767px) */
-    @media (min-width: 640px) and (max-width: 767px) {
+    @media (min-width: 640px) {
         .pagination-mobile {
             /* behave like mobile but tuned for sm */
             display: flex;
@@ -159,14 +159,7 @@
         }
 
         .page-size-box {
-            min-width: 36px;
-            width: 36px;
-            height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0.5rem;
-            font-size: 0.95rem;
+            @apply cursor-pointer border-2 hover:bg-gray-100 flex items-center justify-center rounded-lg shadow-sm min-w-[36px] w-9 h-9 text-sm;
         }
     }
 }
