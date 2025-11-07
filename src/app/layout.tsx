@@ -3,6 +3,7 @@ import "./globals.css";
 import Providers from "@/components/Providers";
 import TopNav from "@/components/navbar/TopNav";
 import { auth } from "@/auth";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "SGBC Information System",
@@ -16,16 +17,18 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
   const userId = session?.user?.id || null;
-  const profileComplete = session?.user.profileComplete as boolean;
+  const profileComplete = session?.user?.profileComplete as boolean;
 
   return (
     <html lang="en">
       <body>
         <Providers userId={userId} profileComplete={profileComplete}>
           <TopNav />
-          <main className="container mx-auto">
+          {/* reserve space for sticky header/footer using main-with-nav */}
+          <main className="container mx-auto main-with-nav">
             {children}
           </main>
+          <Footer />
         </Providers>
       </body>
     </html>

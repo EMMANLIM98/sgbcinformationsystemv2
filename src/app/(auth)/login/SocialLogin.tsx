@@ -11,22 +11,26 @@ export default function SocialLogin() {
         });
     }
     return (
-        <div className='flex items-center w-full gap-2'>
+        <div className='flex w-full gap-2 flex-col sm:flex-row'>
             <Button
                 size='lg'
                 fullWidth
                 variant='bordered'
+                className='flex-1'
                 onPress={() => onClick('google')}
             >
                 <FcGoogle size={20} />
+                <span className='ml-2 hidden sm:inline'>Continue with Google</span>
             </Button>
             <Button
                 size='lg'
                 fullWidth
                 variant='bordered'
+                className='flex-1'
                 onPress={() => onClick('github')}
             >
                 <FaGithub size={20} />
+                <span className='ml-2 hidden sm:inline'>Continue with GitHub</span>
             </Button>
         </div>
     )

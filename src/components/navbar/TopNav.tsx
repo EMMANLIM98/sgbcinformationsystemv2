@@ -8,6 +8,7 @@ import { auth } from '@/auth'
 import UserMenu from './UserMenu'
 import { getUserInfoForNav } from '@/app/actions/userActions'
 import FiltersWrapper from './FiltersWrapper'
+import MobileDrawer from './MobileDrawer'
 
 export default async function TopNav() {
   const session = await auth();
@@ -29,7 +30,7 @@ export default async function TopNav() {
     <>
       <Navbar
         maxWidth='xl'
-        className='bg-gradient-to-r from-green-400 to-green-700'
+        className='site-header site-header--sticky'
         classNames={{
           item: [
             'text-xl',
@@ -39,20 +40,28 @@ export default async function TopNav() {
           ]
         }}
       >
-        <NavbarBrand as={Link} href='/'>
+        <NavbarBrand as={Link} href='/' className='flex items-center gap-2'>
           <GiMatchTip size={40} className='text-gray-700' />
-          <div className='font-bold text-3xl flex'>
+          <div className='font-bold text-2xl hidden md:block'>
             <span className='text-gray-900'>SGBC</span>
-            <span className='text-gray-800'>Information</span>
-            <span className='text-gray-700'>System</span>
+            <span className='text-gray-800 ml-1'>Info</span>
           </div>
         </NavbarBrand>
-        <NavbarContent justify='center'>
+
+        {/* Mobile drawer button (client) - visible only on small screens */}
+        <div className="md:hidden">
+          <MobileDrawer links={links} userInfo={userInfo} />
+        </div>
+
+        {/* center nav — hidden on mobile, shown on md+ */}
+        <NavbarContent justify='center' className='hidden md:flex'>
           {session && links.map(item => (
             <NavLink key={item.href} href={item.href} label={item.label} />
           ))}
         </NavbarContent>
-        <NavbarContent justify='end'>
+
+        {/* end content — collapse into mobile menu above; keep visible on md+ */}
+        <NavbarContent justify='end' className='hidden md:flex'>
           {userInfo ? (
             <UserMenu userInfo={userInfo} />
           ) : (
@@ -61,7 +70,6 @@ export default async function TopNav() {
               <Button as={Link} href='/register' variant='bordered' className='text-white'>Register</Button>
             </>
           )}
-
         </NavbarContent>
       </Navbar>
       <FiltersWrapper />

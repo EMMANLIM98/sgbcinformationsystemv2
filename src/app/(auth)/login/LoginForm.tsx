@@ -32,46 +32,51 @@ export default function LoginForm() {
     }
 
     return (
-        <Card className='w-2/5 mx-auto'>
-            <CardHeader className='flex flex-col items-center justify-center'>
-                <div className='flex flex-col gap-2 items-center'>
-                    <div className='flex flex-row items-center gap-3'>
-                        <GiPadlock size={30} />
-                        <h1 className='text-3xl font-semibold'>Login</h1>
-                    </div>
-                    <p className='text-neutral-500'>Welcome back to SGBC Information System</p>
-                </div>
-            </CardHeader>
-            <CardBody>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className='space-y-4'>
-                        <Input
-                            defaultValue=''
-                            label='Email'
-                            variant='bordered'
-                            {...register('email')}
-                            isInvalid={!!errors.email}
-                            errorMessage={errors.email?.message as string}
-                        />
-                        <Input
-                            defaultValue=''
-                            label='Password'
-                            variant='bordered'
-                            type='password'
-                            {...register('password')}
-                            isInvalid={!!errors.password}
-                            errorMessage={errors.password?.message as string}
-                        />
-                        <Button isLoading={isSubmitting} isDisabled={!isValid} fullWidth color='primary' type='submit'>
-                            Login
-                        </Button>
-                        <SocialLogin />
-                        <div className='flex justify-center hover:underline text-sm'>
-                            <Link href='/forgot-password'>Forgot your password?</Link>
+        <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-base-100">
+            <Card className='w-full max-w-md mx-auto px-4 sm:px-6 py-6 sm:py-8'>
+                <CardHeader className='flex flex-col items-center justify-center text-center'>
+                    <div className='flex flex-col gap-2 items-center'>
+                        <div className='flex flex-row items-center gap-3'>
+                            <GiPadlock size={30} />
+                            <h1 className='text-2xl sm:text-3xl font-semibold'>Login</h1>
                         </div>
+                        <p className='text-sm sm:text-base text-neutral-500 text-center'>Welcome back to SGBC Information System</p>
                     </div>
-                </form>
-            </CardBody>
-        </Card>
+                </CardHeader>
+
+                <CardBody>
+                    <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+                        <Input
+                            className='w-full'
+                            {...register('email')}
+                            placeholder='Email'
+                            aria-invalid={!!errors.email}
+                        />
+                        {errors.email && <p className='text-xs text-red-500'>{errors.email.message}</p>}
+
+                        <Input
+                            className='w-full'
+                            {...register('password')}
+                            type='password'
+                            placeholder='Password'
+                            aria-invalid={!!errors.password}
+                        />
+                        {errors.password && <p className='text-xs text-red-500'>{errors.password.message}</p>}
+
+                        <Button type='submit' size='lg' fullWidth disabled={!isValid || isSubmitting}>
+                            {isSubmitting ? 'Signing in...' : 'Sign in'}
+                        </Button>
+
+                        <div className='flex items-center justify-center'>
+                            <Link href='/auth/forgot' className='text-sm text-primary-600'>Forgot password?</Link>
+                        </div>
+
+                        <div className='w-full flex flex-col sm:flex-row sm:items-center gap-3'>
+                            <SocialLogin />
+                        </div>
+                    </form>
+                </CardBody>
+            </Card>
+        </div>
     )
 }
