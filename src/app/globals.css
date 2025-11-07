@@ -56,6 +56,37 @@
         .filters-mobile .block {
             width: 100%;
         }
+
+        .pagination-mobile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .pagination-info {
+            text-align: center;
+            font-size: 0.875rem;
+            width: 100%;
+        }
+
+        .pagination-controls {
+            /* center pagination control and reduce vertical spacing on phones */
+            margin: 0;
+        }
+
+        .page-size-box {
+            min-width: 36px;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
     }
 
     .site-header {
@@ -102,6 +133,40 @@
             bottom: 0;
             z-index: 40;
             height: var(--footer-height-mobile);
+        }
+    }
+
+    /* small-range fixes for Tailwind 'sm' band (640px - 767px) */
+    @media (min-width: 640px) and (max-width: 767px) {
+        .pagination-mobile {
+            /* behave like mobile but tuned for sm */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .pagination-info {
+            text-align: center;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        .pagination-controls {
+            margin: 0;
+        }
+
+        .page-size-box {
+            min-width: 36px;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
         }
     }
 }
