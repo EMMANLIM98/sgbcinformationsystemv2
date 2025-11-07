@@ -4,17 +4,23 @@
 
 /* define header/footer sizes and primary mobile breakpoint variable */
 :root {
-  --header-height-desktop: 64px;   /* desktop header height */
-  --header-height-mobile: 56px;    /* header height for <= md */
-  --footer-height-mobile: 64px;    /* mobile footer height when fixed */
-  --bp-md: 768px;                  /* md breakpoint used in layout */
+    --header-height-desktop: 64px;
+    /* desktop header height */
+    --header-height-mobile: 56px;
+    /* header height for <= md */
+    --footer-height-mobile: 64px;
+    /* mobile footer height when fixed */
+    --bp-md: 768px;
+    /* md breakpoint used in layout */
 }
 
 @layer components {
-     /* small explicit mobile adjustments (optional, Tailwind handles most) */
+
+    /* small explicit mobile adjustments (optional, Tailwind handles most) */
     @media (max-width: 640px) {
         .vertical-center {
-            height: calc(100vh - var(--header-height-mobile)); /* slightly shorter on small devices */
+            height: calc(100vh - var(--header-height-mobile));
+            /* slightly shorter on small devices */
         }
 
         /* make card slightly tighter on really small screens */
@@ -31,6 +37,25 @@
         .page-size-box {
             @apply cursor-pointer border-2 hover:bg-gray-100 flex items-center justify-center rounded-lg shadow-sm min-w-[36px] w-9 h-9 text-sm;
         }
+
+        .filters-mobile {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .filters-mobile .result-count {
+            font-size: 0.875rem;
+        }
+
+        .filters-mobile .slider-wrapper {
+            width: 100% !important;
+            padding-right: 0.25rem;
+            padding-left: 0.25rem;
+        }
+
+        .filters-mobile .block {
+            width: 100%;
+        }
     }
 
     .site-header {
@@ -43,25 +68,31 @@
         top: 0;
         z-index: 40;
         backdrop-filter: blur(6px);
-        background-color: rgb(255 255 255 / 0.6); /* light translucent */
+        background-color: rgb(255 255 255 / 0.6);
+        /* light translucent */
         height: var(--header-height-desktop);
     }
 
     .main-with-nav {
-        padding-top: var(--header-height-desktop); /* reserve header height on desktop */
-        padding-bottom: var(--footer-height-mobile); /* reserve footer height on desktop */
+        padding-top: var(--header-height-desktop);
+        /* reserve header height on desktop */
+        padding-bottom: var(--footer-height-mobile);
+        /* reserve footer height on desktop */
     }
 
     /* smaller reservations for mobile */
     @media (max-width: 768px) {
+
         .site-header,
         .site-header--sticky {
             height: var(--header-height-mobile);
         }
 
         .main-with-nav {
-            padding-top: var(--header-height-mobile); /* header height on mobile */
-            padding-bottom: calc(var(--footer-height-mobile) + 8px); /* footer height on mobile if fixed (+ gap) */
+            padding-top: var(--header-height-mobile);
+            /* header height on mobile */
+            padding-bottom: calc(var(--footer-height-mobile) + 8px);
+            /* footer height on mobile if fixed (+ gap) */
         }
 
         .site-footer--fixed-mobile {
