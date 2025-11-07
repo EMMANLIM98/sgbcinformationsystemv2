@@ -50,7 +50,9 @@ export default async function TopNav() {
 
         {/* Mobile drawer button (client) - visible only on small screens */}
         <div className="md:hidden">
-          <MobileDrawer links={links} userInfo={userInfo} />
+          {session && (
+            <MobileDrawer links={links} userInfo={userInfo} />
+          )}
         </div>
 
         {/* center nav — hidden on mobile, shown on md+ */}
