@@ -9,6 +9,7 @@ import UserMenu from './UserMenu'
 import { getUserInfoForNav } from '@/app/actions/userActions'
 import FiltersWrapper from './FiltersWrapper'
 import MobileDrawer from './MobileDrawer'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export default async function TopNav() {
   const session = await auth();
@@ -57,6 +58,15 @@ export default async function TopNav() {
 
         {/* center nav — hidden on mobile, shown on md+ */}
         <NavbarContent justify='center' className='hidden md:flex'>
+          <ThemeToggle />
+          {userInfo ? (
+            <UserMenu userInfo={userInfo} />
+          ) : (
+            <>
+              <Button as={Link} href='/login' variant='bordered' className='text-white'>Login</Button>
+              <Button as={Link} href='/register' variant='bordered' className='text-white'>Register</Button>
+            </>
+          )}
           {session && links.map(item => (
             <NavLink key={item.href} href={item.href} label={item.label} />
           ))}
@@ -73,6 +83,11 @@ export default async function TopNav() {
             </>
           )}
         </NavbarContent>
+        <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
+          {/* mobile menu button / drawer */}
+          <MobileDrawer links={links} userInfo={userInfo} />
+        </div>
       </Navbar>
       <FiltersWrapper />
     </>

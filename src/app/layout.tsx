@@ -19,6 +19,20 @@ export default async function RootLayout({
   const userId = session?.user?.id || null;
   const profileComplete = session?.user?.profileComplete as boolean;
 
+  // inline script to set theme before React hydrates (prevents FOUC)
+  const themeInit = `
+    (function() {
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  `;
+
   return (
     <html lang="en">
       <body>
