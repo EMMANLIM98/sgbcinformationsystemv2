@@ -80,30 +80,41 @@ export default function MobileDrawer({ links, userInfo }: { links: LinkItem[]; u
 
             {open &&
                 createPortal(
-                    <div
-                        role="dialog"
-                        aria-modal="true"
-                        id="mobile-drawer"
-                        // fixed full-screen container (portal) — inline zIndex to avoid Tailwind generation issues
-                        style={{ position: 'fixed', inset: 0, zIndex: 99999 }}
-                    >
+                    <>
                         {/* overlay: inline style guarantees visible background */}
                         <div
+                            role="presentation"
                             onClick={() => setOpen(false)}
                             aria-hidden="true"
                             style={{
-                                position: 'fixed',
+                               position: 'fixed',
                                 inset: 0,
                                 backgroundColor: 'rgba(0,0,0,0.72)',
-                                zIndex: 99990,
+                                zIndex: 1000,
+                                pointerEvents: 'auto'
                             }}
                         />
 
-                        {/* panel: fixed to left, explicit width, background and text color */}
+                        {/* panel: fixed to left, explicit width, sits above overlay */}
                         <aside
                             ref={panelRef}
-                            className="relative z-[10000] w-80 max-w-full h-full p-4 shadow-2xl overflow-auto bg-white text-neutral-900 dark:bg-slate-900 dark:text-neutral-100"
-                            style={{ boxShadow: '0 10px 40px rgba(0,0,0,0.35)' }}
+                            style={{
+                                position: 'fixed',
+                                left: 0,
+                                top: 0,
+                                bottom: 0,
+                                width: 320,
+                                maxWidth: '100%',
+                                backgroundColor: '#ffffff',
+                                color: '#111827',
+                                padding: '1rem',
+                                zIndex: 1001,
+                                boxShadow: '0 10px 40px rgba(0,0,0,0.35)',
+                                overflowY: 'auto',
+                                pointerEvents: 'auto'
+                            }}
+                            aria-label="Mobile menu"
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="font-bold text-lg">Menu</div>
@@ -148,7 +159,7 @@ export default function MobileDrawer({ links, userInfo }: { links: LinkItem[]; u
                                 )}
                             </nav>
                         </aside>
-                    </div>,
+                    </>,
                     document.body
                 )}
         </>

@@ -16,12 +16,14 @@
 
 @layer base {
 
-    /* default page colors */
+    /* default (light) */
+    html,
     body {
         @apply bg-white text-neutral-900;
     }
 
-    /* dark mode when `dark` class is present on <html> */
+    /* when .dark is present on <html> */
+    .dark html,
     .dark body {
         @apply bg-slate-900 text-neutral-100;
     }
