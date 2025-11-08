@@ -18,7 +18,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
         <EmptyState />
       ) : (
         <>
-          <div className='mt-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8'>
+          <div className='mt-10 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-8'>
             {members && members.map(member => (
               <MemberCard member={member} key={member.id} likeIds={likeIds} />
             ))}

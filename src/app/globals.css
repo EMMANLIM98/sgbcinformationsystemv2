@@ -183,7 +183,7 @@
         }
     }
 
-    /* small-range fixes for Tailwind 'sm' band (640px - 767px) */
+    /* small-range fixes for Tailwind 'sm' band (640px) */
     @media (min-width: 640px) {
         .pagination-mobile {
             /* behave like mobile but tuned for sm */
@@ -207,6 +207,68 @@
 
         .page-size-box {
             @apply cursor-pointer border-2 hover:bg-gray-100 flex items-center justify-center rounded-lg shadow-sm min-w-[36px] w-9 h-9 text-sm;
+        }
+    }
+
+    @media (min-width: 768px) {
+
+        /* pagination — desktop layout */
+        .pagination-mobile {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .pagination-info {
+            text-align: left;
+            font-size: 1rem;
+            width: auto;
+        }
+
+        .pagination-controls {
+            margin: 0;
+        }
+
+        .page-size-box {
+            min-width: 44px;
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            @apply cursor-pointer border-2;
+        }
+
+        /* filters — desktop layout */
+        .filters-mobile {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .filters-mobile .result-count {
+            font-size: 1rem;
+        }
+
+        .filters-mobile .slider-wrapper {
+            width: auto !important;
+            padding: 0;
+        }
+
+        /* UserMenu / avatar tweaks for desktop */
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+        }
+
+        .user-dropdown {
+            min-width: 220px;
+            font-size: 1rem;
         }
     }
 }
