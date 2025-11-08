@@ -102,22 +102,8 @@ export default function MobileDrawer({ links, userInfo }: { links: LinkItem[]; u
                         {/* panel: fixed to left, explicit width, background and text color */}
                         <aside
                             ref={panelRef}
-                            // panel sits above overlay
-                            style={{
-                                position: 'fixed',
-                                left: 0,
-                                top: 0,
-                                bottom: 0,
-                                width: 320,
-                                maxWidth: '100%',
-                                backgroundColor: '#ffffff',
-                                color: '#111827', // neutral-900
-                                padding: '1rem',
-                                zIndex: 99995,
-                                boxShadow: '0 10px 40px rgba(0,0,0,0.35)',
-                                overflowY: 'auto',
-                            }}
-                            aria-label="Mobile menu"
+                            className="relative z-[10000] w-80 max-w-full h-full p-4 shadow-2xl overflow-auto bg-white text-neutral-900 dark:bg-slate-900 dark:text-neutral-100"
+                            style={{ boxShadow: '0 10px 40px rgba(0,0,0,0.35)' }}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="font-bold text-lg">Menu</div>

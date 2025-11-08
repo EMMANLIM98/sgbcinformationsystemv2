@@ -33,21 +33,21 @@ export default function LoginForm() {
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-base-100">
-            <Card className='w-full max-w-md mx-auto px-4 sm:px-6 py-6 sm:py-8'>
+            <Card className='card w-full max-w-md mx-auto px-4 sm:px-6 py-6 sm:py-8 shadow'>
                 <CardHeader className='flex flex-col items-center justify-center text-center'>
                     <div className='flex flex-col gap-2 items-center'>
                         <div className='flex flex-row items-center gap-3'>
                             <GiPadlock size={30} />
                             <h1 className='text-2xl sm:text-3xl font-semibold'>Login</h1>
                         </div>
-                        <p className='text-sm sm:text-base text-neutral-500 text-center'>Welcome back to SGBC Information System</p>
+                        <p className='text-sm sm:text-base text-neutral-500 dark:text-neutral-400 text-center'>Welcome back to SGBC Information System</p>
                     </div>
                 </CardHeader>
 
                 <CardBody>
                     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
                         <Input
-                            className='w-full'
+                            className='w-full bg-white dark:bg-slate-700 text-neutral-900 dark:text-neutral-100'
                             {...register('email')}
                             placeholder='Email'
                             aria-invalid={!!errors.email}
@@ -55,7 +55,7 @@ export default function LoginForm() {
                         {errors.email && <p className='text-xs text-red-500'>{errors.email.message}</p>}
 
                         <Input
-                            className='w-full'
+                            className='w-full bg-white dark:bg-slate-700 text-neutral-900 dark:text-neutral-100'
                             {...register('password')}
                             type='password'
                             placeholder='Password'
@@ -63,7 +63,7 @@ export default function LoginForm() {
                         />
                         {errors.password && <p className='text-xs text-red-500'>{errors.password.message}</p>}
 
-                        <Button type='submit' size='lg' fullWidth disabled={!isValid || isSubmitting}>
+                        <Button type='submit' size='lg' fullWidth disabled={!isValid || isSubmitting} className='bg-secondary text-white'>
                             {isSubmitting ? 'Signing in...' : 'Sign in'}
                         </Button>
 

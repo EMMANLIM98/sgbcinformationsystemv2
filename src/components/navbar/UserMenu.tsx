@@ -24,15 +24,15 @@ export default function UserMenu({userInfo}: Props) {
           />
         </DropdownTrigger>
         <DropdownMenu variant='flat' aria-label='User actions menu'>
-          <DropdownSection showDivider>
+          <DropdownSection showDivider className='bg-white dark:bg-slate-900 dark:text-neutral-100'>
             <DropdownItem key='signInAs' isReadOnly as='span' className='h-14 flex flex-row' aria-label='username'>
               Signed in as {userInfo?.firstName} {userInfo?.lastName}
             </DropdownItem>
           </DropdownSection>
-          <DropdownItem key='editProfile' as={Link} href='/members/edit'>
+          <DropdownItem key='editProfile' as={Link} href='/members/edit' className='dark:text-neutral-100'>
             Edit Profile
           </DropdownItem>
-          <DropdownItem key='logOut' color='danger' onPress={() => signOutUser()}>
+          <DropdownItem key='logOut' color='danger' onPress={() => signOutUser()} className='dark:text-neutral-100'>
             Logout
           </DropdownItem>
         </DropdownMenu>

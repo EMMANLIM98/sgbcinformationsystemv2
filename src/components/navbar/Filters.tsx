@@ -8,7 +8,7 @@ export default function Filters() {
     const { orderbyList, genderList, selectAge, selectGender, selectOrder, filters, isPending, totalCount, selectWithPhoto } = useFilters();
 
     return (
-        <div className='shadow-md py-2 px-2 md:px-0 filters-mobile'>
+        <div className='shadow-md py-2 px-2 md:px-0 filters-mobile bg-white dark:bg-slate-800 dark:text-neutral-100'>
             <div className='flex flex-col md:flex-row md:justify-around md:items-center gap-3'>
                 <div className='flex gap-2 items-center justify-start md:justify-center w-full md:w-auto'>
                     <div className='text-secondary font-semibold text-sm md:text-xl result-count'>

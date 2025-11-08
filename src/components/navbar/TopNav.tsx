@@ -49,45 +49,31 @@ export default async function TopNav() {
           </div>
         </NavbarBrand>
 
-        {/* Mobile drawer button (client) - visible only on small screens */}
-        <div className="md:hidden">
-          {session && (
-            <MobileDrawer links={links} userInfo={userInfo} />
-          )}
-        </div>
+       {/* center nav — hidden on mobile, shown on md+ (only links) */}
+       <NavbarContent justify='center' className='hidden md:flex'>
+         {session && links.map(item => (
+           <NavLink key={item.href} href={item.href} label={item.label} />
+         ))}
+       </NavbarContent>
 
-        {/* center nav — hidden on mobile, shown on md+ */}
-        <NavbarContent justify='center' className='hidden md:flex'>
-          <ThemeToggle />
-          {userInfo ? (
-            <UserMenu userInfo={userInfo} />
-          ) : (
-            <>
-              <Button as={Link} href='/login' variant='bordered' className='text-white'>Login</Button>
-              <Button as={Link} href='/register' variant='bordered' className='text-white'>Register</Button>
-            </>
-          )}
-          {session && links.map(item => (
-            <NavLink key={item.href} href={item.href} label={item.label} />
-          ))}
-        </NavbarContent>
+       {/* end content — controls (theme + auth) shown on md+ */}
+       <NavbarContent justify='end' className='hidden md:flex items-center gap-3'>
+         <ThemeToggle />
+         {userInfo ? (
+           <UserMenu userInfo={userInfo} />
+         ) : (
+           <>
+             <Button as={Link} href='/login' variant='bordered' className='text-white'>Login</Button>
+             <Button as={Link} href='/register' variant='bordered' className='text-white'>Register</Button>
+           </>
+         )}
+       </NavbarContent>
 
-        {/* end content — collapse into mobile menu above; keep visible on md+ */}
-        <NavbarContent justify='end' className='hidden md:flex'>
-          {userInfo ? (
-            <UserMenu userInfo={userInfo} />
-          ) : (
-            <>
-              <Button as={Link} href='/login' variant='bordered' className='text-white'>Login</Button>
-              <Button as={Link} href='/register' variant='bordered' className='text-white'>Register</Button>
-            </>
-          )}
-        </NavbarContent>
-        <div className="md:hidden flex items-center gap-2">
-          <ThemeToggle />
-          {/* mobile menu button / drawer */}
-          <MobileDrawer links={links} userInfo={userInfo} />
-        </div>
+       {/* mobile: single container with theme toggle + drawer button */}
+       <div className="md:hidden flex items-center gap-2">
+         <ThemeToggle />
+         <MobileDrawer links={links} userInfo={userInfo} />
+       </div>
       </Navbar>
       <FiltersWrapper />
     </>

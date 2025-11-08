@@ -14,7 +14,54 @@
     /* md breakpoint used in layout */
 }
 
+@layer base {
+
+    /* default page colors */
+    body {
+        @apply bg-white text-neutral-900;
+    }
+
+    /* dark mode when `dark` class is present on <html> */
+    .dark body {
+        @apply bg-slate-900 text-neutral-100;
+    }
+}
+
+
+
 @layer components {
+
+    .card {
+        @apply bg-white text-neutral-900;
+    }
+
+    .dark .card {
+        @apply bg-slate-800 text-neutral-100;
+    }
+
+    .site-header {
+        @apply bg-white/60;
+    }
+
+    .dark .site-header {
+        @apply bg-slate-900/60;
+    }
+
+    .site-footer {
+        @apply bg-white text-neutral-700;
+    }
+
+    .dark .site-footer {
+        @apply bg-slate-900 text-neutral-300;
+    }
+
+    .page-size-box {
+        @apply bg-white border text-neutral-900;
+    }
+
+    .dark .page-size-box {
+        @apply bg-slate-700 border-slate-600 text-neutral-100;
+    }
 
     /* small explicit mobile adjustments (optional, Tailwind handles most) */
     @media (max-width: 640px) {
