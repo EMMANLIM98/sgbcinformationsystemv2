@@ -4,6 +4,13 @@
 
 /* define header/footer sizes and primary mobile breakpoint variable */
 :root {
+    --accent: #16a34a;
+    /* emerald-500 */
+    --accent-600: #15803d;
+    /* emerald-600 */
+    --accent-100: #dcfce7;
+    /* light emerald */
+
     --header-height-desktop: 64px;
     /* desktop header height */
     --header-height-mobile: 56px;
@@ -32,6 +39,49 @@
 
 
 @layer components {
+
+    /* accent / "secondary" mapping — touch of green */
+    .bg-secondary {
+        background-color: var(--accent) !important;
+        color: #ffffff !important;
+    }
+
+    .bg-secondary:hover {
+        background-color: var(--accent-600) !important;
+    }
+
+    .text-secondary {
+        color: var(--accent) !important;
+    }
+
+    .border-secondary {
+        border-color: var(--accent) !important;
+    }
+
+    /* page-size selected state uses bg-secondary so it inherits the green */
+    .page-size-box {
+        @apply bg-white border text-neutral-900;
+    }
+
+    .page-size-box.bg-secondary {
+        background-color: var(--accent) !important;
+        color: #fff !important;
+        border-color: var(--accent) !important;
+    }
+
+    /* subtle header/footer tint when active */
+    .site-header--sticky {
+        background-color: rgb(16 163 127 / 0.06);
+        /* very light green tint */
+    }
+
+    .dark .site-header--sticky {
+        background-color: rgb(16 163 127 / 0.08);
+    }
+
+    .site-footer a:hover {
+        color: var(--accent) !important;
+    }
 
     .card {
         @apply bg-white text-neutral-900;

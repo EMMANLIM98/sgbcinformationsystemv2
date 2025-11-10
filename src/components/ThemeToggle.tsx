@@ -38,7 +38,7 @@ export default function ThemeToggle() {
       onClick={toggle}
       className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-slate-700 transition"
     >
-      {theme === 'dark' ? <FaSun className="text-yellow-300" /> : <FaMoon />}
+      {theme === 'dark' ? <FaSun className="text-yellow-300" /> :  <FaMoon className="text-emerald-600" />}
     </button>
   );
 }
