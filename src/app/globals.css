@@ -11,6 +11,10 @@
     --accent-100: #dcfce7;
     /* light emerald */
 
+    /* subtle green backgrounds for light theme to blend with accent */
+    --muted: #f0fff4; /* very light green (emerald-50) */
+    --muted-2: #ecfdf5; /* slightly stronger light green */
+
     --header-height-desktop: 64px;
     /* desktop header height */
     --header-height-mobile: 56px;
@@ -22,7 +26,6 @@
 }
 
 @layer base {
-
     /* default (light) */
     html,
     body {
@@ -61,6 +64,10 @@
     /* page-size selected state uses bg-secondary so it inherits the green */
     .page-size-box {
         @apply bg-white border text-neutral-900;
+        /* subtle tinted background and soft border to blend with green accent */
+        background-color: var(--muted);
+        border: 1px solid rgba(22,163,74,0.12);
+        color: var(--accent-600);
     }
 
     .page-size-box.bg-secondary {
@@ -71,12 +78,18 @@
 
     /* subtle header/footer tint when active */
     .site-header--sticky {
-        background-color: rgb(16 163 127 / 0.06);
-        /* very light green tint */
+        /* slightly stronger green tint for a cohesive accent */
+        background-color: rgba(22,163,74,0.06);
+        backdrop-filter: blur(6px);
     }
 
     .dark .site-header--sticky {
-        background-color: rgb(16 163 127 / 0.08);
+        background-color: rgba(22,163,74,0.08);
+    }
+
+    .site-footer {
+        /* soft green-tinted footer in light mode */
+        background: linear-gradient(180deg, rgba(240,255,244,0.6), rgba(255,255,255,0));
     }
 
     .site-footer a:hover {
@@ -84,7 +97,8 @@
     }
 
     .card {
-        @apply bg-white text-neutral-900;
+        background-color: var(--muted);
+        color: var(--accent-600);
     }
 
     .dark .card {

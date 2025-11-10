@@ -23,9 +23,10 @@ export default function ThemeToggle() {
   }, []);
 
   const toggle = () => {
-    const next = theme === 'dark' ? 'light' : 'dark';
+    const map = { dark: 'light', light: 'dark' } as const;
+    const next = (map as Record<string, 'light' | 'dark'>)[theme as string] ?? 'dark';
     setTheme(next);
-    try { localStorage.setItem('theme', next); } catch {}
+    try { localStorage.setItem('theme', next); } catch { }
     document.documentElement.classList.toggle('dark', next === 'dark');
   };
 
@@ -38,7 +39,7 @@ export default function ThemeToggle() {
       onClick={toggle}
       className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-slate-700 transition"
     >
-      {theme === 'dark' ? <FaSun className="text-yellow-300" /> :  <FaMoon className="text-emerald-600" />}
+      {theme === 'dark' ? <FaSun className="text-yellow-300" /> : <FaMoon className="text-black" />}
     </button>
   );
 }
