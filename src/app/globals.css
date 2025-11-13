@@ -2,339 +2,323 @@
 @tailwind components;
 @tailwind utilities;
 
-/* define header/footer sizes and primary mobile breakpoint variable */
+/* Professional color scheme and spacing system */
 :root {
-    --accent: #16a34a;
-    /* emerald-500 */
-    --accent-600: #15803d;
-    /* emerald-600 */
-    --accent-100: #dcfce7;
-    /* light emerald */
+  /* Professional brand colors */
+  --primary: #1e40af; /* blue-700 */
+  --primary-hover: #1d4ed8; /* blue-600 */
+  --primary-light: #dbeafe; /* blue-100 */
 
-    /* subtle green backgrounds for light theme to blend with accent */
-    --muted: #f0fff4; /* very light green (emerald-50) */
-    --muted-2: #ecfdf5; /* slightly stronger light green */
+  /* Refined accent system */
+  --accent: #059669; /* emerald-600 */
+  --accent-hover: #047857; /* emerald-700 */
+  --accent-light: #d1fae5; /* emerald-100 */
 
-    --header-height-desktop: 64px;
-    /* desktop header height */
-    --header-height-mobile: 56px;
-    /* header height for <= md */
-    --footer-height-mobile: 64px;
-    /* mobile footer height when fixed */
-    --bp-md: 768px;
-    /* md breakpoint used in layout */
+  /* Professional neutrals */
+  --neutral-50: #f9fafb;
+  --neutral-100: #f3f4f6;
+  --neutral-200: #e5e7eb;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #1f2937;
+  --neutral-900: #111827;
+
+  /* Enhanced shadows */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* Professional spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Enhanced border radius system */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Layout dimensions */
+  --header-height-desktop: 72px;
+  --header-height-mobile: 64px;
+  --footer-height-mobile: 64px;
+  --bp-md: 768px;
 }
 
 @layer base {
-    /* default (light) */
-    html,
-    body {
-        @apply bg-white text-neutral-900;
-    }
+  /* Enhanced base styles with smooth transitions */
+  html,
+  body {
+    @apply bg-white text-neutral-900;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    transition: background-color 150ms ease, color 150ms ease;
+  }
 
-    /* when .dark is present on <html> */
-    .dark html,
-    .dark body {
-        @apply bg-slate-900 text-neutral-100;
-    }
+  .dark html,
+  .dark body {
+    @apply bg-slate-900 text-neutral-100;
+  }
+
+  /* Professional typography */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
 }
 
-
-
 @layer components {
+  /* Professional card system */
+  .card {
+    background: white;
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-    /* accent / "secondary" mapping — touch of green */
-    .bg-secondary {
-        background-color: var(--accent) !important;
-        color: #ffffff !important;
-    }
+  .card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--primary-light);
+  }
 
-    .bg-secondary:hover {
-        background-color: var(--accent-600) !important;
-    }
+  .dark .card {
+    background: #1e293b;
+    border-color: #334155;
+  }
 
-    .text-secondary {
-        color: var(--accent) !important;
-    }
+  /* Enhanced button system */
+  .btn-primary {
+    background: linear-gradient(
+      135deg,
+      var(--primary) 0%,
+      var(--primary-hover) 100%
+    );
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    transition: all 200ms ease;
+    box-shadow: var(--shadow-sm);
+  }
 
-    .border-secondary {
-        border-color: var(--accent) !important;
-    }
+  .btn-primary:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
 
-    /* page-size selected state uses bg-secondary so it inherits the green */
-    .page-size-box {
-        @apply bg-white border text-neutral-900;
-        /* subtle tinted background and soft border to blend with green accent */
-        background-color: var(--muted);
-        border: 1px solid rgba(22,163,74,0.12);
-        color: var(--accent-600);
-    }
+  /* Professional header with refined styling */
+  .site-header {
+    @apply w-full;
+    height: var(--header-height-desktop);
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid var(--neutral-200);
+  }
 
-    .page-size-box.bg-secondary {
-        background-color: var(--accent) !important;
-        color: #fff !important;
-        border-color: var(--accent) !important;
-    }
+  .site-header--sticky {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid var(--neutral-200);
+    box-shadow: var(--shadow-sm);
+    height: var(--header-height-desktop);
+  }
 
-    /* subtle header/footer tint when active */
-    .site-header--sticky {
-        /* slightly stronger green tint for a cohesive accent */
-        background-color: rgba(22,163,74,0.06);
-        backdrop-filter: blur(6px);
-    }
+  .dark .site-header,
+  .dark .site-header--sticky {
+    background: rgba(15, 23, 42, 0.95);
+    border-bottom-color: #334155;
+  }
 
-    .dark .site-header--sticky {
-        background-color: rgba(22,163,74,0.08);
-    }
+  /* Professional footer */
+  .site-footer {
+    background: white;
+    color: var(--neutral-700);
+    border-top: 1px solid var(--neutral-200);
+    margin-top: 3rem;
+  }
 
-    .site-footer {
-        /* soft green-tinted footer in light mode */
-        background: linear-gradient(180deg, rgba(240,255,244,0.6), rgba(255,255,255,0));
-    }
+  .dark .site-footer {
+    background: #0f172a;
+    color: var(--neutral-300);
+    border-top-color: #334155;
+  }
 
-    .site-footer a:hover {
-        color: var(--accent) !important;
-    }
+  .site-footer a:hover {
+    color: var(--primary) !important;
+    transition: color 150ms ease;
+  }
 
+  /* Enhanced button and accent system */
+  .bg-secondary {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+    box-shadow: var(--shadow-sm);
+    transition: all 150ms ease;
+  }
+
+  .bg-secondary:hover {
+    background-color: var(--accent-hover) !important;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .text-secondary {
+    color: var(--accent) !important;
+  }
+
+  .text-primary {
+    color: var(--primary) !important;
+  }
+
+  .bg-primary {
+    background-color: var(--primary) !important;
+    color: #ffffff !important;
+  }
+
+  .bg-primary:hover {
+    background-color: var(--primary-hover) !important;
+  }
+
+  .border-secondary {
+    border-color: var(--accent) !important;
+  }
+
+  /* Professional page size boxes */
+  .page-size-box {
+    background: white;
+    border: 1px solid var(--neutral-200);
+    color: var(--neutral-700);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 150ms ease;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .page-size-box:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  .page-size-box.bg-secondary {
+    background-color: var(--accent) !important;
+    color: #fff !important;
+    border-color: var(--accent) !important;
+    box-shadow: var(--shadow-md);
+  }
+
+  .dark .page-size-box {
+    background: #374151;
+    border-color: #4b5563;
+    color: var(--neutral-300);
+  }
+
+  /* Professional main content spacing */
+  .main-with-nav {
+    padding-top: var(--header-height-desktop);
+    padding-bottom: var(--footer-height-mobile);
+    min-height: calc(100vh - var(--header-height-desktop));
+  }
+
+  /* Enhanced filter and pagination styling */
+  .filters-mobile {
+    background: white;
+    border: 1px solid var(--neutral-200);
+    box-shadow: var(--shadow-sm);
+    border-radius: 12px;
+    padding: 1rem;
+  }
+
+  .dark .filters-mobile {
+    background: #1e293b;
+    border-color: #334155;
+    color: var(--neutral-100);
+  }
+
+  /* Professional user menu styling */
+  .user-avatar {
+    border: 2px solid var(--neutral-200);
+    transition: all 150ms ease;
+  }
+
+  .user-avatar:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+  }
+
+  .dark .user-avatar {
+    border-color: #374151;
+  }
+
+  .user-dropdown {
+    background: white;
+    border: 1px solid var(--neutral-200);
+    box-shadow: var(--shadow-lg);
+    border-radius: 12px;
+    padding: 0.5rem;
+    min-width: 200px;
+  }
+
+  .dark .user-dropdown {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  /* Responsive styles */
+  @media (max-width: 639px) {
     .card {
-        background-color: var(--muted);
-        color: var(--accent-600);
-    }
-
-    .dark .card {
-        @apply bg-slate-800 text-neutral-100;
-    }
-
-    .site-header {
-        @apply bg-white/60;
-    }
-
-    .dark .site-header {
-        @apply bg-slate-900/60;
-    }
-
-    .site-footer {
-        @apply bg-white text-neutral-700;
-    }
-
-    .dark .site-footer {
-        @apply bg-slate-900 text-neutral-300;
+      padding: 1rem;
+      border-radius: 8px;
     }
 
     .page-size-box {
-        @apply bg-white border text-neutral-900;
+      min-width: 36px;
+      width: 36px;
+      height: 36px;
+      font-size: 0.875rem;
     }
 
-    .dark .page-size-box {
-        @apply bg-slate-700 border-slate-600 text-neutral-100;
-    }
-
-    /* small explicit mobile adjustments (optional, Tailwind handles most) */
-    @media (max-width: 640px) {
-        .vertical-center {
-            height: calc(100vh - var(--header-height-mobile));
-            /* slightly shorter on small devices */
-        }
-
-        /* make card slightly tighter on really small screens */
-        .card {
-            padding-left: .5rem;
-            padding-right: .5rem;
-        }
-
-        /* reduce heading on smallest screens (fallback if not using responsive classes) */
-        .login-card-heading {
-            font-size: 1.125rem;
-        }
-
-        .page-size-box {
-            @apply cursor-pointer border-2 hover:bg-gray-100 flex items-center justify-center rounded-lg shadow-sm min-w-[36px] w-9 h-9 text-sm;
-        }
-
-        .filters-mobile {
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-
-        .filters-mobile .result-count {
-            font-size: 0.875rem;
-        }
-
-        .filters-mobile .slider-wrapper {
-            width: 100% !important;
-            padding-right: 0.25rem;
-            padding-left: 0.25rem;
-        }
-
-        .filters-mobile .block {
-            width: 100%;
-        }
-
-        .pagination-mobile {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-
-        .pagination-info {
-            text-align: center;
-            font-size: 0.875rem;
-            width: 100%;
-        }
-
-        .pagination-controls {
-            /* center pagination control and reduce vertical spacing on phones */
-            margin: 0;
-        }
-
-        .page-size-box {
-            min-width: 36px;
-            width: 36px;
-            height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-        }
-    }
-
-    .site-header {
-        @apply w-full bg-transparent;
-        height: var(--header-height-desktop);
-    }
-
+    .site-header,
     .site-header--sticky {
-        position: sticky;
-        top: 0;
-        z-index: 40;
-        backdrop-filter: blur(6px);
-        background-color: rgb(255 255 255 / 0.6);
-        /* light translucent */
-        height: var(--header-height-desktop);
+      height: var(--header-height-mobile);
     }
 
     .main-with-nav {
-        padding-top: var(--header-height-desktop);
-        /* reserve header height on desktop */
-        padding-bottom: var(--footer-height-mobile);
-        /* reserve footer height on desktop */
+      padding-top: var(--header-height-mobile);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .card {
+      padding: 2rem;
     }
 
-    /* smaller reservations for mobile */
-    @media (max-width: 768px) {
-
-        .site-header,
-        .site-header--sticky {
-            height: var(--header-height-mobile);
-        }
-
-        .main-with-nav {
-            padding-top: var(--header-height-mobile);
-            /* header height on mobile */
-            padding-bottom: calc(var(--footer-height-mobile) + 8px);
-            /* footer height on mobile if fixed (+ gap) */
-        }
-
-        .site-footer--fixed-mobile {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 40;
-            height: var(--footer-height-mobile);
-        }
+    .page-size-box {
+      min-width: 44px;
+      width: 44px;
+      height: 44px;
+      font-size: 1rem;
     }
-
-    /* small-range fixes for Tailwind 'sm' band (640px) */
-    @media (min-width: 640px) {
-        .pagination-mobile {
-            /* behave like mobile but tuned for sm */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-
-        .pagination-info {
-            text-align: center;
-            font-size: 0.95rem;
-            width: 100%;
-        }
-
-        .pagination-controls {
-            margin: 0;
-        }
-
-        .page-size-box {
-            @apply cursor-pointer border-2 hover:bg-gray-100 flex items-center justify-center rounded-lg shadow-sm min-w-[36px] w-9 h-9 text-sm;
-        }
-    }
-
-    @media (min-width: 768px) {
-
-        /* pagination — desktop layout */
-        .pagination-mobile {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-            padding-left: 0;
-            padding-right: 0;
-        }
-
-        .pagination-info {
-            text-align: left;
-            font-size: 1rem;
-            width: auto;
-        }
-
-        .pagination-controls {
-            margin: 0;
-        }
-
-        .page-size-box {
-            min-width: 44px;
-            width: 44px;
-            height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            @apply cursor-pointer border-2;
-        }
-
-        /* filters — desktop layout */
-        .filters-mobile {
-            padding-left: 0;
-            padding-right: 0;
-        }
-
-        .filters-mobile .result-count {
-            font-size: 1rem;
-        }
-
-        .filters-mobile .slider-wrapper {
-            width: auto !important;
-            padding: 0;
-        }
-
-        /* UserMenu / avatar tweaks for desktop */
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-        }
-
-        .user-dropdown {
-            min-width: 220px;
-            font-size: 1rem;
-        }
-    }
+  }
 }

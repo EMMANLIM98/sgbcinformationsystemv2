@@ -1,33 +1,36 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { FaMoon, FaSun } from 'react-icons/fa';
+import React, { useEffect, useState } from "react";
+import { FaMoon, FaSun } from "react-icons/fa";
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
+  const [theme, setTheme] = useState<"light" | "dark" | null>(null);
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('theme') as 'light' | 'dark' | null;
+      const stored = localStorage.getItem("theme") as "light" | "dark" | null;
       if (stored) {
         setTheme(stored);
-        document.documentElement.classList.toggle('dark', stored === 'dark');
+        document.documentElement.classList.toggle("dark", stored === "dark");
         return;
       }
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
-      document.documentElement.classList.toggle('dark', prefersDark);
+      const prefersDark =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+      setTheme(prefersDark ? "dark" : "light");
+      document.documentElement.classList.toggle("dark", prefersDark);
     } catch (e) {
-      setTheme('light');
+      setTheme("light");
     }
   }, []);
 
   const toggle = () => {
-    const map = { dark: 'light', light: 'dark' } as const;
-    const next = (map as Record<string, 'light' | 'dark'>)[theme as string] ?? 'dark';
+    const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    try { localStorage.setItem('theme', next); } catch { }
-    document.documentElement.classList.toggle('dark', next === 'dark');
+    try {
+      localStorage.setItem("theme", next);
+    } catch {}
+    document.documentElement.classList.toggle("dark", next === "dark");
   };
 
   if (theme === null) return null;
@@ -35,11 +38,15 @@ export default function ThemeToggle() {
   return (
     <button
       aria-label="Toggle theme"
-      title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       onClick={toggle}
-      className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+      className="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md"
     >
-      {theme === 'dark' ? <FaSun className="text-yellow-300" /> : <FaMoon className="text-black" />}
+      {theme === "dark" ? (
+        <FaSun className="text-yellow-500 w-5 h-5" />
+      ) : (
+        <FaMoon className="text-gray-700 dark:text-gray-300 w-5 h-5" />
+      )}
     </button>
   );
 }
