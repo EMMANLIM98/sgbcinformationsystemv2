@@ -40,19 +40,19 @@ export default async function TopNav() {
         >
           {/* Logo Image Container */}
           <div className="relative">
-            <div className="p-2 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
+            <div className="p-2 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 border border-emerald-200 dark:border-emerald-700 dark:bg-slate-800/95">
               <Image
-                src="/images/SGBC_Logo.ico"
+                src="/images/SGBC_Logo.jpg"
                 alt="SGBC Logo"
                 width={28}
                 height={28}
                 className="object-contain"
                 classNames={{
-                  img: "filter brightness-0 invert", // Makes logo white on colored background
+                  img: "rounded-lg", // Optional: slightly round the logo corners
                 }}
               />
             </div>
-            {/* Optional: Add a small indicator dot */}
+            {/* Keep the indicator dot */}
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white dark:border-slate-900 animate-pulse"></div>
           </div>
 
