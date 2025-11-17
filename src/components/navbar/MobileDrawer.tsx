@@ -3,8 +3,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { IoClose, IoMenu } from "react-icons/io5";
-import { calculateAge, transformImageUrl } from "@/lib/util";
+import { IoClose, IoMenu, IoPersonCircle } from "react-icons/io5";
+import { transformImageUrl } from "@/lib/util";
 
 type LinkItem = { href: string; label: string };
 
