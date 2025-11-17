@@ -2,7 +2,7 @@ import { Navbar, NavbarBrand, NavbarContent } from "@heroui/navbar";
 import { Button } from "@heroui/button";
 import Link from "next/link";
 import React from "react";
-import { GiMatchTip } from "react-icons/gi";
+import { Image } from "@heroui/image";
 import NavLink from "./NavLink";
 import { auth } from "@/auth";
 import UserMenu from "./UserMenu";
@@ -38,10 +38,19 @@ export default async function TopNav() {
           href="/"
           className="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200"
         >
-          {/* Logo Icon Container */}
+          {/* Logo Image Container */}
           <div className="relative">
             <div className="p-2 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
-              <GiMatchTip size={28} className="text-white" />
+              <Image
+                src="/images/SGBC_Logo.ico"
+                alt="SGBC Logo"
+                width={28}
+                height={28}
+                className="object-contain"
+                classNames={{
+                  img: "filter brightness-0 invert", // Makes logo white on colored background
+                }}
+              />
             </div>
             {/* Optional: Add a small indicator dot */}
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white dark:border-slate-900 animate-pulse"></div>
