@@ -277,6 +277,8 @@ export async function completeSocialLoginProfile(
       where: { id: session.user.id },
       data: {
         profileComplete: true,
+        firstName: data.firstName,
+        lastName: data.lastName,
         Member: {
           create: {
             name: session.user.name as string,
