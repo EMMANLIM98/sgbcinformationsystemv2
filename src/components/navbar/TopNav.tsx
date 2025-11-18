@@ -29,8 +29,9 @@ export default async function TopNav() {
     <>
       <Navbar
         maxWidth="xl"
-        className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 shadow-sm"
+        className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 shadow-sm z-50"
         height="72px"
+        style={{ zIndex: 9999 }}
       >
         {/* Professional Logo - Responsive */}
         <NavbarBrand
