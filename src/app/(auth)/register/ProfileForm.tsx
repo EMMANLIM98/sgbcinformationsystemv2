@@ -41,6 +41,73 @@ export default function ProfileForm() {
             Personal Details
           </h3>
 
+          {/* First Name and Last Name - Responsive Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Input
+              defaultValue={getValues("firstName")}
+              label="First Name"
+              variant="bordered"
+              size="md"
+              radius="lg"
+              {...register("firstName")}
+              isInvalid={!!errors.firstName}
+              errorMessage={errors.firstName?.message as string}
+              placeholder="Your first name"
+              classNames={{
+                input: "text-sm",
+                inputWrapper:
+                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
+              }}
+              startContent={
+                <div className="text-gray-400">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              }
+            />
+
+            <Input
+              defaultValue={getValues("lastName")}
+              label="Last Name"
+              variant="bordered"
+              size="md"
+              radius="lg"
+              {...register("lastName")}
+              isInvalid={!!errors.lastName}
+              errorMessage={errors.lastName?.message as string}
+              placeholder="Your last name"
+              classNames={{
+                input: "text-sm",
+                inputWrapper:
+                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
+              }}
+              startContent={
+                <div className="text-gray-400">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              }
+            />
+          </div>
+
           {/* Gender and Date of Birth - Responsive Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <Select
@@ -59,6 +126,21 @@ export default function ProfileForm() {
                   "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
                 value: "text-sm",
               }}
+              startContent={
+                <div className="text-gray-400">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              }
             >
               {genderList.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
@@ -83,6 +165,21 @@ export default function ProfileForm() {
                 inputWrapper:
                   "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
               }}
+              startContent={
+                <div className="text-gray-400">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              }
             />
           </div>
 
@@ -144,6 +241,21 @@ export default function ProfileForm() {
                 inputWrapper:
                   "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
               }}
+              startContent={
+                <div className="text-gray-400">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              }
             />
 
             <Input
@@ -161,6 +273,21 @@ export default function ProfileForm() {
                 inputWrapper:
                   "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
               }}
+              startContent={
+                <div className="text-gray-400">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              }
             />
           </div>
         </div>
