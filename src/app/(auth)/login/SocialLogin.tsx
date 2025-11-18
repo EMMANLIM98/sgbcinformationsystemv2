@@ -39,7 +39,7 @@ export default function SocialLogin() {
           <div className="flex items-center justify-center gap-3">
             <FcGoogle size={20} className="flex-shrink-0" />
             <span className="hidden sm:inline text-gray-700 dark:text-gray-300">
-              Continue with Google
+              Google
             </span>
             <span className="sm:hidden text-gray-700 dark:text-gray-300 font-medium">
               Google
@@ -62,7 +62,7 @@ export default function SocialLogin() {
               className="flex-shrink-0 text-gray-700 dark:text-gray-300"
             />
             <span className="hidden sm:inline text-gray-700 dark:text-gray-300">
-              Continue with GitHub
+              GitHub
             </span>
             <span className="sm:hidden text-gray-700 dark:text-gray-300 font-medium">
               GitHub
