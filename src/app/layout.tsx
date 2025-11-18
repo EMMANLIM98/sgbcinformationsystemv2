@@ -8,6 +8,9 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "SGBC Information System",
   description: "Created by Emman Lim Jr.",
+  icons: {
+    icon: [{ url: "/images/SGBC_Logo.ico" }],
+  },
 };
 
 export default async function RootLayout({
