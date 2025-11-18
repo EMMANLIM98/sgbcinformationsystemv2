@@ -14,9 +14,9 @@ export const profileSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   gender: z.string().min(1),
-  description: z.string().min(1),
+  description: z.string(),
   city: z.string().min(1),
-  country: z.string().min(1),
+  country: z.string(),
   dateOfBirth: z
     .string()
     .min(1, {
