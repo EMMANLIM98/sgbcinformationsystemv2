@@ -123,7 +123,7 @@ export async function registerUser(
 
     // Only add roles if roleIds exists and has items
     if (roleIds && roleIds.length > 0) {
-      memberData.roles = {
+      memberData.Roles = {
         connect: roleIds.map((id) => ({ id })),
       };
     }
@@ -316,8 +316,15 @@ export async function completeSocialLoginProfile(
 
     // Only add roles if roleIds exists and has items
     if (data.roleIds && data.roleIds.length > 0) {
-      memberData.roles = {
+      memberData.Roles = {
         connect: data.roleIds.map((id) => ({ id })),
+      };
+    }
+
+    // Add group connection if groupId exists
+    if (data.groupId) {
+      memberData.Group = {
+        connect: { id: data.groupId },
       };
     }
 
