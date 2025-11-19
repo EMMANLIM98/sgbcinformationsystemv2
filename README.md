@@ -35,19 +35,28 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-
 ## Prisma commands
-1. npx prisma generate
-2. npx prisma db push
-3. npx prisma db seed
-4. npx prisma studio
-5. npx prisma migrate dev -n Initial --create-only
-6. npx prisma migrate reset
-7. npx prisma migrate dev -n AddedIsApproved
-8. npx prisma migrate dev -n <NameOfChange>
 
+### Development Workflow:
+
+1. **npx prisma generate** - Generate Prisma client after schema changes
+2. **npx prisma db push** - Quick schema push (development only)
+3. **npx prisma db seed** - Seed database with initial data
+4. **npx prisma studio** - Open Prisma Studio GUI
+
+### Migration Workflow (Production Ready):
+
+5. **npx prisma migrate dev --name <change-description>** - Create and apply migration
+6. **npx prisma migrate reset** - Reset database and apply all migrations + seed
+7. **npx prisma migrate deploy** - Apply migrations in production
+
+### Manual Steps for Seeding Data:
+
+1. npx prisma db seed
+2. npx prisma studio
 
 ## Third Party Libraries Used
+
 => React
 => NextJS
 => NextApp
@@ -63,8 +72,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 => Pusher
 => Zustand
 
-
 ## Downgrade to Tailwind CSS v3 and Upgrade to Tailwind CSS v4:
+
 1. npm uninstall tailwindcss
 2. npm install -D tailwindcss@3
 3. npx tailwindcss init -p

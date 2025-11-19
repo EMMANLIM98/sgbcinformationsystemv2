@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { membersData } from "./membersData";
-import { groupData } from "./groupData";
-import { roleData } from "./roleData";
+import { groupsData } from "./groupsData";
+import { rolesData } from "./rolesData";
 import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -63,28 +63,28 @@ async function seedAdmin() {
 }
 
 async function seedGroup() {
-  return groupData.map(async (group) =>
+  return groupsData.map(async (group) =>
     prisma.group.create({
       data: {
         name: group.name,
         description: group.description,
         isActive: true,
         createdAt: new Date(),
-        updated: new Date(),
+        updatedAt: new Date(),
       },
     })
   );
 }
 
 async function seedRole() {
-  return roleData.map(async (role) =>
+  return rolesData.map(async (role) =>
     prisma.role.create({
       data: {
         name: role.name,
         description: role.description,
         isActive: true,
         createdAt: new Date(),
-        updated: new Date(),
+        updatedAt: new Date(),
       },
     })
   );

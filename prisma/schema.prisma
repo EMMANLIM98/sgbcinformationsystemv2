@@ -143,8 +143,8 @@ model Member {
   targetLike         Like[]    @relation("target")
   senderMessages     Message[] @relation("sender")
   recipientMessages  Message[] @relation("recipient")
-  memberRole         MemberRole?    @relation(fields: [roleId], references: [id])  // Changed name and capitalized
-  memberGroup        MemberGroup?   @relation(fields: [groupId], references: [id]) // Changed name and capitalized
+  Role         Role?    @relation(fields: [roleId], references: [id])  // Changed name and capitalized
+  Group        Group?   @relation(fields: [groupId], references: [id]) // Changed name and capitalized
 }
 
 model Photo {
@@ -191,7 +191,7 @@ model Token {
   @@unique([email, token])
 }
 
-model MemberRole {  // Renamed from Role to MemberRole to avoid conflict
+model Role {
   id          String   @id @default(cuid())
   name        String   @unique  // e.g., "Pastor", "Deacon", "Member"
   description String?
@@ -201,11 +201,9 @@ model MemberRole {  // Renamed from Role to MemberRole to avoid conflict
   
   // Relations
   members     Member[]
-  
-  @@map("member_role")
 }
 
-model MemberGroup {  // Renamed from Group to MemberGroup to avoid conflict
+model Group {
   id          String   @id @default(cuid())
   name        String   @unique  // e.g., "Men Of David (MOD)", "House Of Lydia (HOL), College & Career, etc."
   description String?
@@ -215,8 +213,6 @@ model MemberGroup {  // Renamed from Group to MemberGroup to avoid conflict
   
   // Relations
   members     Member[]
-  
-  @@map("member_group")
 }
 
 enum TokenType {
@@ -224,7 +220,7 @@ enum TokenType {
   PASSWORD_RESET
 }
 
-enum UserRole {  // Renamed from Role to UserRole to avoid conflict with MemberRole model
+enum UserRole {  // Renamed from Role to UserRole to avoid conflict with Role model
   ADMIN
   MEMBER
 }
