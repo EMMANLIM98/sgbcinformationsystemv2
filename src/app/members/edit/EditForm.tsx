@@ -17,6 +17,7 @@ import {
   CardHeader,
   Select,
   SelectItem,
+  Selection, // Added missing import
 } from "@heroui/react";
 import { updateMemberProfile } from "@/app/actions/userActions";
 import { getMemberRoles } from "@/app/actions/roleActions";
@@ -28,8 +29,8 @@ import { format, subYears } from "date-fns";
 
 type Props = {
   member: Member & {
-    memberRole?: Role;
-    memberGroup?: Group;
+    Roles?: Role[]; // Fixed: Use Roles array instead of single memberRole
+    Group?: Group; // Fixed: Use Group instead of memberGroup
   };
 };
 
@@ -38,6 +39,7 @@ export default function EditForm({ member }: Props) {
   const [roles, setRoles] = useState<Role[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRoles, setSelectedRoles] = useState<Selection>(new Set()); // Added missing state
 
   const {
     register,
@@ -83,6 +85,12 @@ export default function EditForm({ member }: Props) {
 
   useEffect(() => {
     if (member) {
+      // Get member's current role IDs
+      const memberRoleIds = member.Roles?.map((role) => role.id) || [];
+
+      // Set the selected roles for the multi-select
+      setSelectedRoles(new Set(memberRoleIds));
+
       reset({
         firstName: member.firstName,
         lastName: member.lastName,
@@ -95,16 +103,26 @@ export default function EditForm({ member }: Props) {
         description: member.description ?? "",
         city: member.city ?? "",
         country: member.country ?? "",
-        roleIds: member.roleIds ?? [],
-        groupId: member.groupId ?? "",
+        roleIds: memberRoleIds, // Fixed: Use actual role IDs array
+        groupId: member.Group?.id ?? "", // Fixed: Use Group.id
       });
     }
   }, [member, reset]);
 
-  const handleRoleSelectionChange = (keys: any) => {
-    const selectedKeys = new Set(keys);
-    setSelectedRoles(selectedKeys);
-    setValue("roleIds", Array.from(selectedKeys));
+  // Fixed: Handle role selection changes with proper typing
+  const handleRoleSelectionChange = (keys: Selection) => {
+    setSelectedRoles(keys);
+
+    // Convert Selection to array of strings for form
+    if (keys === "all") {
+      // If "all" is selected, use all role IDs
+      const allRoleIds = roles.map((role) => role.id);
+      setValue("roleIds", allRoleIds);
+    } else {
+      // Convert Set to Array
+      const selectedArray = Array.from(keys as Set<string>);
+      setValue("roleIds", selectedArray);
+    }
   };
 
   const onSubmit = async (data: MemberEditSchema) => {
@@ -370,8 +388,9 @@ export default function EditForm({ member }: Props) {
                 Church Details
               </h3>
 
-              {/* Role and Group */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              {/* Role and Group - Fixed: Removed duplicate Group select */}
+              <div className="grid grid-cols-1 gap-3 sm:gap-4">
+                {/* Multiple Roles Selection */}
                 <Select
                   label="Church Roles"
                   aria-label="Select Church Roles"
@@ -388,6 +407,17 @@ export default function EditForm({ member }: Props) {
                       "border-2 hover:border-purple-400 group-data-[focus=true]:border-purple-600 shadow-sm transition-all duration-200 min-h-[44px]",
                     value: "text-sm",
                   }}
+                  startContent={
+                    <div className="text-gray-400">
+                      <svg
+                        className="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                      </svg>
+                    </div>
+                  }
                   renderValue={(items) => {
                     return (
                       <div className="flex flex-wrap gap-1">
@@ -410,34 +440,9 @@ export default function EditForm({ member }: Props) {
                   ))}
                 </Select>
 
-                {/* Single Group Selection */}
+                {/* Single Group Selection - Fixed: Only one Group select */}
                 <Select
-                  selectedKeys={member.groupId ? [member.groupId] : []}
-                  label="Group"
-                  aria-label="Select Group"
-                  variant="bordered"
-                  size="md"
-                  radius="lg"
-                  {...register("groupId")}
-                  isInvalid={!!errors.groupId}
-                  errorMessage={errors.groupId?.message}
-                  onChange={(e) => setValue("groupId", e.target.value)}
-                  isLoading={loading}
-                  classNames={{
-                    trigger:
-                      "border-2 hover:border-purple-400 group-data-[focus=true]:border-purple-600 shadow-sm transition-all duration-200 min-h-[44px]",
-                    value: "text-sm",
-                  }}
-                >
-                  {groups.map((group) => (
-                    <SelectItem key={group.id} value={group.id}>
-                      {group.name}
-                    </SelectItem>
-                  ))}
-                </Select>
-
-                <Select
-                  selectedKeys={member.groupId ? [member.groupId] : []}
+                  selectedKeys={member.Group?.id ? [member.Group.id] : []}
                   label="Group"
                   aria-label="Select Group"
                   variant="bordered"

@@ -7,6 +7,7 @@ import { useFormContext } from "react-hook-form";
 import { getMemberRoles } from "@/app/actions/roleActions";
 import { getMemberGroups } from "@/app/actions/groupActions";
 import { Group, Role } from "@prisma/client";
+import { Selection } from "@heroui/react";
 
 export default function ProfileForm() {
   const {
@@ -21,7 +22,7 @@ export default function ProfileForm() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRoles, setSelectedRoles] = useState<Set<string>>(new Set()); // Added missing state
+  const [selectedRoles, setSelectedRoles] = useState<Selection>(new Set()); // Fixed type
   const dateValue = watch("dateOfBirth");
 
   // Fetch roles and groups on component mount
@@ -71,11 +72,20 @@ export default function ProfileForm() {
     { label: "Female", value: "female" },
   ];
 
-  // Handle role selection changes
-  const handleRoleSelectionChange = (keys: any) => {
-    const selectedKeys = new Set(keys);
-    setSelectedRoles(selectedKeys);
-    setValue("roleIds", Array.from(selectedKeys));
+  // Fixed: Handle role selection changes with proper typing
+  const handleRoleSelectionChange = (keys: Selection) => {
+    setSelectedRoles(keys);
+
+    // Convert Selection to array of strings for form
+    if (keys === "all") {
+      // If "all" is selected, use all role IDs
+      const allRoleIds = roles.map((role) => role.id);
+      setValue("roleIds", allRoleIds);
+    } else {
+      // Convert Set to Array
+      const selectedArray = Array.from(keys as Set<string>);
+      setValue("roleIds", selectedArray);
+    }
   };
 
   return (
@@ -245,7 +255,7 @@ export default function ProfileForm() {
             />
           </div>
 
-          {/* Contact Number and Address */}
+          {/* Contact Number */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <Input
               defaultValue={getValues("contactNumber")}
@@ -276,6 +286,27 @@ export default function ProfileForm() {
               }
             />
           </div>
+
+          {/* Description */}
+          <div>
+            <Textarea
+              defaultValue={getValues("description")}
+              label="About Me (Optional)"
+              variant="bordered"
+              radius="lg"
+              {...register("description")}
+              isInvalid={!!errors.description}
+              errorMessage={errors.description?.message as string}
+              minRows={2}
+              maxRows={4}
+              placeholder="Tell us about yourself..."
+              classNames={{
+                input: "text-sm resize-none",
+                inputWrapper:
+                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200",
+              }}
+            />
+          </div>
         </div>
 
         {/* Church Details Section */}
@@ -295,7 +326,7 @@ export default function ProfileForm() {
 
           {/* Role and Group */}
           <div className="grid grid-cols-1 gap-3 sm:gap-4">
-            {/* Multiple Roles Selection */}
+            {/* Multiple Roles Selection - Fixed typing */}
             <Select
               label="Church Roles (Choose 1 or more)"
               aria-label="Select Church Roles"
@@ -350,7 +381,7 @@ export default function ProfileForm() {
               defaultSelectedKeys={
                 getValues("groupId") ? [getValues("groupId")] : []
               }
-              label="Group"
+              label="Group (Optional)"
               aria-label="Select Group"
               variant="bordered"
               size="md"
@@ -408,6 +439,8 @@ export default function ProfileForm() {
             </div>
             Location
           </h3>
+
+          {/* Address */}
           <Input
             defaultValue={getValues("address")}
             label="Address (Optional)"
@@ -440,6 +473,7 @@ export default function ProfileForm() {
             }
           />
 
+          {/* City and Country */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <Input
               defaultValue={getValues("city")}

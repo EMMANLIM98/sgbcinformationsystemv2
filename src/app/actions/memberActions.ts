@@ -42,6 +42,11 @@ export async function getMembers({
           userId,
         },
       },
+      // Include relations here as well for consistency
+      include: {
+        Roles: true,
+        Group: true,
+      },
     });
 
     const members = await prisma.member.findMany({
@@ -61,6 +66,11 @@ export async function getMembers({
       },
       skip,
       take: limit,
+      // Include relations here as well
+      include: {
+        Roles: true,
+        Group: true,
+      },
     });
 
     return {
@@ -81,8 +91,8 @@ export async function getMemberByUserId(userId: string) {
     return prisma.member.findUnique({
       where: { userId },
       include: {
-        rolesId: true,
-        groupId: true,
+        Roles: true, // Fixed: Use relation name, not scalar field
+        Group: true, // Fixed: Use relation name, not scalar field
       },
     });
   } catch (error) {
