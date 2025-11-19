@@ -19,7 +19,7 @@ export const profileSchema = z.object({
   address: z.string().optional(),
   city: z.string().min(1),
   country: z.string(),
-  roleId: z.string().optional(),
+  roleIds: z.array(z.string()).optional(),
   groupId: z.string().optional(),
   dateOfBirth: z
     .string()

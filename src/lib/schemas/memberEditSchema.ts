@@ -10,7 +10,7 @@ export const memberEditSchema = z.object({
   description: z.string().optional(),
   city: z.string().optional(),
   country: z.string().optional(),
-  roleId: z.string().optional(),
+  roleIds: z.array(z.string()).optional(),
   groupId: z.string().optional(),
 });
 

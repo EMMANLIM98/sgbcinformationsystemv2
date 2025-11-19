@@ -129,7 +129,7 @@ model Member {
   dateOfBirth        DateTime?
   spiritualBirthDate DateTime?
   groupId            String?
-  roleId             String?
+  rolesId             String?
   isActive           Boolean   @default(true)
   created            DateTime  @default(now())
   updated            DateTime  @default(now())
@@ -143,7 +143,7 @@ model Member {
   targetLike         Like[]    @relation("target")
   senderMessages     Message[] @relation("sender")
   recipientMessages  Message[] @relation("recipient")
-  Role         Role?    @relation(fields: [roleId], references: [id])  // Changed name and capitalized
+  Roles         Role[]    @relation("MemberRoles")  // Many-to-many relationship
   Group        Group?   @relation(fields: [groupId], references: [id]) // Changed name and capitalized
 }
 
@@ -199,8 +199,8 @@ model Role {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
-  // Relations
-  members     Member[]
+  // Many-to-many relationship with Member
+  members     Member[]  @relation("MemberRoles")
 }
 
 model Group {

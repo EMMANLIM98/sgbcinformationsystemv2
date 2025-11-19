@@ -95,11 +95,17 @@ export default function EditForm({ member }: Props) {
         description: member.description ?? "",
         city: member.city ?? "",
         country: member.country ?? "",
-        roleId: member.roleId ?? "",
+        roleIds: member.roleIds ?? [],
         groupId: member.groupId ?? "",
       });
     }
   }, [member, reset]);
+
+  const handleRoleSelectionChange = (keys: any) => {
+    const selectedKeys = new Set(keys);
+    setSelectedRoles(selectedKeys);
+    setValue("roleIds", Array.from(selectedKeys));
+  };
 
   const onSubmit = async (data: MemberEditSchema) => {
     const nameUpdated =
@@ -367,37 +373,65 @@ export default function EditForm({ member }: Props) {
               {/* Role and Group */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <Select
-                  selectedKeys={member.roleId ? [member.roleId] : []}
-                  label="Church Role"
-                  aria-label="Select Church Role"
+                  label="Church Roles"
+                  aria-label="Select Church Roles"
                   variant="bordered"
                   size="md"
                   radius="lg"
-                  {...register("roleId")}
-                  isInvalid={!!errors.roleId}
-                  errorMessage={errors.roleId?.message}
-                  onChange={(e) => setValue("roleId", e.target.value)}
+                  selectionMode="multiple"
+                  selectedKeys={selectedRoles}
+                  onSelectionChange={handleRoleSelectionChange}
+                  isLoading={loading}
+                  placeholder="Select one or more roles"
+                  classNames={{
+                    trigger:
+                      "border-2 hover:border-purple-400 group-data-[focus=true]:border-purple-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                    value: "text-sm",
+                  }}
+                  renderValue={(items) => {
+                    return (
+                      <div className="flex flex-wrap gap-1">
+                        {items.map((item) => (
+                          <div
+                            key={item.key}
+                            className="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 px-2 py-1 rounded-md text-xs font-medium"
+                          >
+                            {item.textValue}
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }}
+                >
+                  {roles.map((role) => (
+                    <SelectItem key={role.id} value={role.id}>
+                      {role.name}
+                    </SelectItem>
+                  ))}
+                </Select>
+
+                {/* Single Group Selection */}
+                <Select
+                  selectedKeys={member.groupId ? [member.groupId] : []}
+                  label="Group"
+                  aria-label="Select Group"
+                  variant="bordered"
+                  size="md"
+                  radius="lg"
+                  {...register("groupId")}
+                  isInvalid={!!errors.groupId}
+                  errorMessage={errors.groupId?.message}
+                  onChange={(e) => setValue("groupId", e.target.value)}
                   isLoading={loading}
                   classNames={{
                     trigger:
                       "border-2 hover:border-purple-400 group-data-[focus=true]:border-purple-600 shadow-sm transition-all duration-200 min-h-[44px]",
                     value: "text-sm",
                   }}
-                  startContent={
-                    <div className="text-gray-400">
-                      <svg
-                        className="w-4 h-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-                      </svg>
-                    </div>
-                  }
                 >
-                  {roles.map((role) => (
-                    <SelectItem key={role.id} value={role.id}>
-                      {role.name}
+                  {groups.map((group) => (
+                    <SelectItem key={group.id} value={group.id}>
+                      {group.name}
                     </SelectItem>
                   ))}
                 </Select>

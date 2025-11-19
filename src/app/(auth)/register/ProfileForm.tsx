@@ -21,6 +21,7 @@ export default function ProfileForm() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRoles, setSelectedRoles] = useState<Set<string>>(new Set()); // Added missing state
   const dateValue = watch("dateOfBirth");
 
   // Fetch roles and groups on component mount
@@ -69,6 +70,13 @@ export default function ProfileForm() {
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
   ];
+
+  // Handle role selection changes
+  const handleRoleSelectionChange = (keys: any) => {
+    const selectedKeys = new Set(keys);
+    setSelectedRoles(selectedKeys);
+    setValue("roleIds", Array.from(selectedKeys));
+  };
 
   return (
     <div className="w-full mx-auto">
@@ -237,7 +245,7 @@ export default function ProfileForm() {
             />
           </div>
 
-          {/* Contact Number */}
+          {/* Contact Number and Address */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <Input
               defaultValue={getValues("contactNumber")}
@@ -285,22 +293,20 @@ export default function ProfileForm() {
             Church Details
           </h3>
 
-          {/* Role and Group - Dynamic from Database */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          {/* Role and Group */}
+          <div className="grid grid-cols-1 gap-3 sm:gap-4">
+            {/* Multiple Roles Selection */}
             <Select
-              defaultSelectedKeys={
-                getValues("roleId") ? [getValues("roleId")] : []
-              }
-              label="Church Role"
-              aria-label="Select Church Role"
+              label="Church Roles (Choose 1 or more)"
+              aria-label="Select Church Roles"
               variant="bordered"
               size="md"
               radius="lg"
-              {...register("roleId")}
-              isInvalid={!!errors.roleId}
-              errorMessage={errors.roleId?.message as string}
-              onChange={(e) => setValue("roleId", e.target.value)}
+              selectionMode="multiple"
+              selectedKeys={selectedRoles}
+              onSelectionChange={handleRoleSelectionChange}
               isLoading={loading}
+              placeholder="Select one or more roles"
               classNames={{
                 trigger:
                   "border-2 hover:border-purple-400 group-data-[focus=true]:border-purple-600 shadow-sm transition-all duration-200 min-h-[44px]",
@@ -317,6 +323,20 @@ export default function ProfileForm() {
                   </svg>
                 </div>
               }
+              renderValue={(items) => {
+                return (
+                  <div className="flex flex-wrap gap-1">
+                    {items.map((item) => (
+                      <div
+                        key={item.key}
+                        className="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 px-2 py-1 rounded-md text-xs font-medium"
+                      >
+                        {item.textValue}
+                      </div>
+                    ))}
+                  </div>
+                );
+              }}
             >
               {roles.map((role) => (
                 <SelectItem key={role.id} value={role.id}>
@@ -325,6 +345,7 @@ export default function ProfileForm() {
               ))}
             </Select>
 
+            {/* Single Group Selection */}
             <Select
               defaultSelectedKeys={
                 getValues("groupId") ? [getValues("groupId")] : []
@@ -387,7 +408,6 @@ export default function ProfileForm() {
             </div>
             Location
           </h3>
-
           <Input
             defaultValue={getValues("address")}
             label="Address (Optional)"

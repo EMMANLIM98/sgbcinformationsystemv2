@@ -87,10 +87,12 @@ export async function registerUser(
       password,
       gender,
       description,
+      contactNumber,
+      address,
       city,
       country,
       dateOfBirth,
-      roleId,
+      roleIds,
       groupId,
     } = validated.data;
 
@@ -104,6 +106,35 @@ export async function registerUser(
       return { status: "error", error: "User already exists with this email." };
     }
 
+    // Prepare member data
+    const memberData: any = {
+      firstName: firstname,
+      lastName: lastname,
+      name: `${firstname} ${lastname}`,
+      email: email.toLowerCase(),
+      description,
+      contactNumber,
+      address,
+      city,
+      country,
+      dateOfBirth: new Date(dateOfBirth),
+      gender,
+    };
+
+    // Only add roles if roleIds exists and has items
+    if (roleIds && roleIds.length > 0) {
+      memberData.roles = {
+        connect: roleIds.map((id) => ({ id })),
+      };
+    }
+
+    // Add group connection if groupId exists
+    if (data.groupId) {
+      memberData.Group = {
+        connect: { id: data.groupId },
+      };
+    }
+
     const user = await prisma.user.create({
       data: {
         name: `${firstname} ${lastname}`,
@@ -112,18 +143,7 @@ export async function registerUser(
         email: email.toLowerCase(),
         passwordHash: hashedPassword,
         Member: {
-          create: {
-            firstName: firstname,
-            lastName: lastname,
-            email: email.toLowerCase(),
-            description,
-            city,
-            country,
-            dateOfBirth: new Date(dateOfBirth),
-            gender,
-            roleId: roleId || null,
-            groupId: groupId || null,
-          },
+          create: memberData,
         },
       },
     });
@@ -276,7 +296,31 @@ export async function completeSocialLoginProfile(
   const session = await auth();
 
   if (!session?.user) return { status: "error", error: "User not found." };
+
   try {
+    // Prepare member data
+    const memberData: any = {
+      name: session.user.name as string,
+      image: session.user.image,
+      gender: data.gender,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: session.user.email?.toLowerCase(),
+      description: data.description,
+      contactNumber: data.contactNumber,
+      address: data.address,
+      city: data.city,
+      country: data.country,
+      dateOfBirth: new Date(data.dateOfBirth),
+    };
+
+    // Only add roles if roleIds exists and has items
+    if (data.roleIds && data.roleIds.length > 0) {
+      memberData.roles = {
+        connect: data.roleIds.map((id) => ({ id })),
+      };
+    }
+
     const user = await prisma.user.update({
       where: { id: session.user.id },
       data: {
@@ -284,22 +328,7 @@ export async function completeSocialLoginProfile(
         firstName: data.firstName,
         lastName: data.lastName,
         Member: {
-          create: {
-            name: session.user.name as string,
-            image: session.user.image,
-            gender: data.gender,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: session.user.email?.toLowerCase(),
-            description: data.description,
-            contactNumber: data.contactNumber,
-            address: data.address,
-            city: data.city,
-            country: data.country,
-            dateOfBirth: new Date(data.dateOfBirth),
-            roleId: data.roleId || null,
-            groupId: data.groupId || null,
-          },
+          create: memberData,
         },
       },
       select: {
@@ -310,6 +339,7 @@ export async function completeSocialLoginProfile(
         },
       },
     });
+
     return { status: "success", data: user.accounts[0].provider };
   } catch (error) {
     console.log(error);
