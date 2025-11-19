@@ -292,6 +292,8 @@ export async function completeSocialLoginProfile(
             lastName: data.lastName,
             email: session.user.email?.toLowerCase(),
             description: data.description,
+            contactNumber: data.contactNumber,
+            address: data.address,
             city: data.city,
             country: data.country,
             dateOfBirth: new Date(data.dateOfBirth),
