@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { ActionResult } from "@/types";
 import { Group } from "@prisma/client";
 
-export async function getMemberGroups(): Promise<ActionResult<MemberGroup[]>> {
+export async function getMemberGroups(): Promise<ActionResult<Group[]>> {
   try {
-    const groups = await prisma.memberGroup.findMany({
+    const groups = await prisma.group.findMany({
       where: { isActive: true },
       orderBy: { name: "asc" },
     });

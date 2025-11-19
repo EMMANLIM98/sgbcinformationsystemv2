@@ -90,8 +90,8 @@ export async function registerUser(
       city,
       country,
       dateOfBirth,
-      memberRoleId,
-      memberGroupId,
+      roleId,
+      groupId,
     } = validated.data;
 
     const hashedPassword = await bcrypt.hash(password, 14);
@@ -121,8 +121,8 @@ export async function registerUser(
             country,
             dateOfBirth: new Date(dateOfBirth),
             gender,
-            memberRoleId: memberRoleId || null,
-            memberGroupId: memberGroupId || null,
+            roleId: roleId || null,
+            groupId: groupId || null,
           },
         },
       },
@@ -295,8 +295,8 @@ export async function completeSocialLoginProfile(
             city: data.city,
             country: data.country,
             dateOfBirth: new Date(data.dateOfBirth),
-            memberRoleId: data.memberRoleId || null,
-            memberGroupId: data.memberGroupId || null,
+            roleId: data.roleId || null,
+            groupId: data.groupId || null,
           },
         },
       },

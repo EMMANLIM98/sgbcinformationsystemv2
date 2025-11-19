@@ -50,18 +50,6 @@ async function seedMembers() {
   );
 }
 
-async function seedAdmin() {
-  return prisma.user.create({
-    data: {
-      email: "admin@sgbcinformationsystem.com",
-      emailVerified: new Date(),
-      name: "Admin",
-      passwordHash: await hash("Password", 14),
-      role: "ADMIN",
-    },
-  });
-}
-
 async function seedGroup() {
   return groupsData.map(async (group) =>
     prisma.group.create({
@@ -96,7 +84,6 @@ async function main() {
     process.env.NODE_ENV === "development"
   ) {
     await seedMembers();
-    await seedAdmin();
     await seedGroup();
     await seedRole();
   }

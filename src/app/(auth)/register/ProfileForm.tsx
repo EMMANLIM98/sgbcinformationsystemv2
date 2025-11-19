@@ -4,7 +4,8 @@ import { Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { format, subYears } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { getGroupRoles, getChurchGroups } from "@/app/actions/roleActions";
+import { getMemberRoles } from "@/app/actions/roleActions";
+import { getMemberGroups } from "@/app/actions/groupActions";
 import { ChurchGroup, GroupRole } from "@prisma/client";
 
 export default function ProfileForm() {
@@ -28,8 +29,8 @@ export default function ProfileForm() {
       try {
         setLoading(true);
         const [rolesResult, groupsResult] = await Promise.all([
-          getGroupRoles(),
-          getChurchGroups(),
+          getMemberRoles(),
+          getMemberGroups(),
         ]);
 
         if (rolesResult.status === "success") {

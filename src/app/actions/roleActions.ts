@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { ActionResult } from "@/types";
 import { Role } from "@prisma/client";
 
-export async function getMemberRoles(): Promise<ActionResult<MemberRole[]>> {
+export async function getMemberRoles(): Promise<ActionResult<Role[]>> {
   try {
-    const roles = await prisma.memberRole.findMany({
+    const roles = await prisma.role.findMany({
       where: { isActive: true },
       orderBy: { name: "asc" },
     });
