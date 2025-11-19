@@ -108,7 +108,7 @@ model User {
   passwordHash    String?
   image           String?
   profileComplete Boolean   @default(false)
-  role            Role      @default(MEMBER)
+  role            UserRole  @default(MEMBER)  // Changed from Role to UserRole
   accounts        Account[]
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -128,6 +128,8 @@ model Member {
   contactNumber      String?
   dateOfBirth        DateTime?
   spiritualBirthDate DateTime?
+  groupId            String?
+  roleId             String?
   isActive           Boolean   @default(true)
   created            DateTime  @default(now())
   updated            DateTime  @default(now())
@@ -141,6 +143,8 @@ model Member {
   targetLike         Like[]    @relation("target")
   senderMessages     Message[] @relation("sender")
   recipientMessages  Message[] @relation("recipient")
+  memberRole         MemberRole?    @relation(fields: [roleId], references: [id])  // Changed name and capitalized
+  memberGroup        MemberGroup?   @relation(fields: [groupId], references: [id]) // Changed name and capitalized
 }
 
 model Photo {
@@ -187,12 +191,40 @@ model Token {
   @@unique([email, token])
 }
 
+model MemberRole {  // Renamed from Role to MemberRole to avoid conflict
+  id          String   @id @default(cuid())
+  name        String   @unique  // e.g., "Pastor", "Deacon", "Member"
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  members     Member[]
+  
+  @@map("member_role")
+}
+
+model MemberGroup {  // Renamed from Group to MemberGroup to avoid conflict
+  id          String   @id @default(cuid())
+  name        String   @unique  // e.g., "Men Of David (MOD)", "House Of Lydia (HOL), College & Career, etc."
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  members     Member[]
+  
+  @@map("member_group")
+}
+
 enum TokenType {
   VERIFICATION
   PASSWORD_RESET
 }
 
-enum Role {
+enum UserRole {  // Renamed from Role to UserRole to avoid conflict with MemberRole model
   ADMIN
   MEMBER
 }

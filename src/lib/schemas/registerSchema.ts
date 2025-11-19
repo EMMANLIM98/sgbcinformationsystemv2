@@ -17,6 +17,8 @@ export const profileSchema = z.object({
   description: z.string(),
   city: z.string().min(1),
   country: z.string(),
+  memberRoleId: z.string().optional(),
+  memberGroupId: z.string().optional(),
   dateOfBirth: z
     .string()
     .min(1, {
