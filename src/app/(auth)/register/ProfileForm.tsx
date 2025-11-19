@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { getMemberRoles } from "@/app/actions/roleActions";
 import { getMemberGroups } from "@/app/actions/groupActions";
-import { ChurchGroup, GroupRole } from "@prisma/client";
+import { Group, Role } from "@prisma/client";
 
 export default function ProfileForm() {
   const {
@@ -18,8 +18,8 @@ export default function ProfileForm() {
   } = useFormContext();
 
   const [displayDate, setDisplayDate] = useState("");
-  const [roles, setRoles] = useState<GroupRole[]>([]);
-  const [groups, setGroups] = useState<ChurchGroup[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
   const dateValue = watch("dateOfBirth");
 
@@ -225,10 +225,10 @@ export default function ProfileForm() {
               variant="bordered"
               size="md"
               radius="lg"
-              {...register("groupRoleId")}
-              isInvalid={!!errors.groupRoleId}
-              errorMessage={errors.groupRoleId?.message as string}
-              onChange={(e) => setValue("groupRoleId", e.target.value)}
+              {...register("roleId")}
+              isInvalid={!!errors.roleId}
+              errorMessage={errors.roleId?.message as string}
+              onChange={(e) => setValue("roleId", e.target.value)}
               isLoading={loading}
               classNames={{
                 trigger:
@@ -245,17 +245,17 @@ export default function ProfileForm() {
 
             <Select
               defaultSelectedKeys={
-                getValues("churchGroupId") ? [getValues("churchGroupId")] : []
+                getValues("groupId") ? [getValues("groupId")] : []
               }
-              label="Ministry Group"
-              aria-label="Select Ministry Group"
+              label="Group"
+              aria-label="Select Group"
               variant="bordered"
               size="md"
               radius="lg"
-              {...register("churchGroupId")}
-              isInvalid={!!errors.churchGroupId}
-              errorMessage={errors.churchGroupId?.message as string}
-              onChange={(e) => setValue("churchGroupId", e.target.value)}
+              {...register("groupId")}
+              isInvalid={!!errors.groupId}
+              errorMessage={errors.groupId?.message as string}
+              onChange={(e) => setValue("groupId", e.target.value)}
               isLoading={loading}
               classNames={{
                 trigger:
