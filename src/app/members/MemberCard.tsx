@@ -5,7 +5,7 @@ import { Member, Role } from "@prisma/client";
 import { Card, CardFooter } from "@heroui/card";
 import { Image } from "@heroui/image";
 import Link from "next/link";
-import { calculateAge, transformImageUrl } from "@/lib/util";
+import { calculateAge, transformImageUrl, formatLongDate } from "@/lib/util";
 import LikeButton from "@/components/LikeButton";
 import PresenceDot from "@/components/PresenceDot";
 import { toggleLikeMember } from "../actions/likeActions";
@@ -94,7 +94,7 @@ export default function MemberCard({ member, likeIds }: Props) {
               {member.firstName} {member.lastName}
             </h3>
             <span className="text-xs sm:text-sm text-emerald-200 font-medium">
-              {calculateAge(member.dateOfBirth)}
+              {formatLongDate(member.dateOfBirth)}
             </span>
           </div>
 
