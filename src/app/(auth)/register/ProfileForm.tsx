@@ -229,9 +229,7 @@ export default function ProfileForm() {
               }
             >
               {genderList.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.label}
-                </SelectItem>
+                <SelectItem key={item.value}>{item.label}</SelectItem>
               ))}
             </Select>
 
