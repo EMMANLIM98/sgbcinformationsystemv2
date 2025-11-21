@@ -372,9 +372,7 @@ export default function ProfileForm() {
                 }}
               >
                 {roles.map((role) => (
-                  <SelectItem key={role.id} value={role.id}>
-                    {role.name}
-                  </SelectItem>
+                  <SelectItem key={role.id}>{role.name}</SelectItem>
                 ))}
               </Select>
 
@@ -501,9 +499,7 @@ export default function ProfileForm() {
               }
             >
               {groups.map((group) => (
-                <SelectItem key={group.id} value={group.id}>
-                  {group.name}
-                </SelectItem>
+                <SelectItem key={group.id}>{group.name}</SelectItem>
               ))}
             </Select>
           </div>
