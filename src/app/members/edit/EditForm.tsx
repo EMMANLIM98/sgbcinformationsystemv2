@@ -5,7 +5,7 @@ import {
   memberEditSchema,
 } from "@/lib/schemas/memberEditSchema";
 import { Member, Role, Group } from "@prisma/client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -17,7 +17,7 @@ import {
   CardHeader,
   Select,
   SelectItem,
-  Selection, // Added missing import
+  Selection,
 } from "@heroui/react";
 import { updateMemberProfile } from "@/app/actions/userActions";
 import { getMemberRoles } from "@/app/actions/roleActions";
@@ -29,8 +29,8 @@ import { format, subYears } from "date-fns";
 
 type Props = {
   member: Member & {
-    Roles?: Role[]; // Fixed: Use Roles array instead of single memberRole
-    Group?: Group; // Fixed: Use Group instead of memberGroup
+    Roles?: Role[];
+    Group?: Group;
   };
 };
 
@@ -39,7 +39,7 @@ export default function EditForm({ member }: Props) {
   const [roles, setRoles] = useState<Role[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRoles, setSelectedRoles] = useState<Selection>(new Set()); // Added missing state
+  const [selectedRoles, setSelectedRoles] = useState<Selection>(new Set());
 
   const {
     register,
@@ -55,6 +55,17 @@ export default function EditForm({ member }: Props) {
   });
 
   const dateValue = watch("dateOfBirth");
+
+  // Get selected role names for display
+  const selectedRoleItems = useMemo(() => {
+    if (selectedRoles === "all") {
+      return roles;
+    }
+    if (selectedRoles instanceof Set) {
+      return roles.filter((role) => selectedRoles.has(role.id));
+    }
+    return [];
+  }, [selectedRoles, roles]);
 
   // Fetch roles and groups on component mount
   useEffect(() => {
@@ -85,10 +96,7 @@ export default function EditForm({ member }: Props) {
 
   useEffect(() => {
     if (member) {
-      // Get member's current role IDs
       const memberRoleIds = member.Roles?.map((role) => role.id) || [];
-
-      // Set the selected roles for the multi-select
       setSelectedRoles(new Set(memberRoleIds));
 
       reset({
@@ -103,23 +111,19 @@ export default function EditForm({ member }: Props) {
         description: member.description ?? "",
         city: member.city ?? "",
         country: member.country ?? "",
-        roleIds: memberRoleIds, // Fixed: Use actual role IDs array
-        groupId: member.Group?.id ?? "", // Fixed: Use Group.id
+        roleIds: memberRoleIds,
+        groupId: member.Group?.id ?? "",
       });
     }
   }, [member, reset]);
 
-  // Fixed: Handle role selection changes with proper typing
   const handleRoleSelectionChange = (keys: Selection) => {
     setSelectedRoles(keys);
 
-    // Convert Selection to array of strings for form
     if (keys === "all") {
-      // If "all" is selected, use all role IDs
       const allRoleIds = roles.map((role) => role.id);
       setValue("roleIds", allRoleIds);
     } else {
-      // Convert Set to Array
       const selectedArray = Array.from(keys as Set<string>);
       setValue("roleIds", selectedArray);
     }
@@ -282,9 +286,7 @@ export default function EditForm({ member }: Props) {
                   }
                 >
                   {genderList.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
-                      {item.label}
-                    </SelectItem>
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
                   ))}
                 </Select>
 
@@ -351,26 +353,6 @@ export default function EditForm({ member }: Props) {
                   }
                 />
               </div>
-
-              {/* Description */}
-              <div>
-                <Textarea
-                  label="About Me"
-                  variant="bordered"
-                  radius="lg"
-                  {...register("description")}
-                  isInvalid={!!errors.description}
-                  errorMessage={errors.description?.message}
-                  minRows={3}
-                  maxRows={6}
-                  placeholder="Tell us about yourself..."
-                  classNames={{
-                    input: "text-sm resize-none",
-                    inputWrapper:
-                      "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200",
-                  }}
-                />
-              </div>
             </div>
 
             {/* Church Details Section */}
@@ -388,62 +370,132 @@ export default function EditForm({ member }: Props) {
                 Church Details
               </h3>
 
-              {/* Role and Group - Fixed: Removed duplicate Group select */}
               <div className="grid grid-cols-1 gap-3 sm:gap-4">
-                {/* Multiple Roles Selection */}
-                <Select
-                  label="Church Roles"
-                  aria-label="Select Church Roles"
-                  variant="bordered"
-                  size="md"
-                  radius="lg"
-                  selectionMode="multiple"
-                  selectedKeys={selectedRoles}
-                  onSelectionChange={handleRoleSelectionChange}
-                  isLoading={loading}
-                  placeholder="Select one or more roles"
-                  classNames={{
-                    trigger:
-                      "border-2 hover:border-purple-400 group-data-[focus=true]:border-purple-600 shadow-sm transition-all duration-200 min-h-[44px]",
-                    value: "text-sm",
-                  }}
-                  startContent={
-                    <div className="text-gray-400">
-                      <svg
-                        className="w-4 h-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-                      </svg>
-                    </div>
-                  }
-                  renderValue={(items) => {
-                    return (
-                      <div className="flex flex-wrap gap-1">
-                        {items.map((item) => (
+                {/* Custom Multiple Roles Selection */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Church Roles <span className="text-red-500">*</span>
+                  </label>
+
+                  {/* Role Selection Dropdown */}
+                  <Select
+                    aria-label="Select Church Roles"
+                    variant="bordered"
+                    size="md"
+                    radius="lg"
+                    selectionMode="multiple"
+                    selectedKeys={selectedRoles}
+                    onSelectionChange={handleRoleSelectionChange}
+                    isLoading={loading}
+                    placeholder="Select one or more roles"
+                    classNames={{
+                      trigger:
+                        "border-2 hover:border-purple-400 group-data-[focus=true]:border-purple-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                      value: "text-sm",
+                    }}
+                    startContent={
+                      <div className="text-gray-400">
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                        </svg>
+                      </div>
+                    }
+                    renderValue={() => {
+                      if (selectedRoleItems.length === 0) {
+                        return (
+                          <span className="text-gray-400 text-sm">
+                            Select one or more roles
+                          </span>
+                        );
+                      }
+                      return (
+                        <span className="text-sm text-gray-600 dark:text-gray-300">
+                          {selectedRoleItems.length} role
+                          {selectedRoleItems.length !== 1 ? "s" : ""} selected
+                        </span>
+                      );
+                    }}
+                  >
+                    {roles.map((role) => (
+                      <SelectItem key={role.id}>{role.name}</SelectItem>
+                    ))}
+                  </Select>
+
+                  {/* Selected Roles Display */}
+                  {selectedRoleItems.length > 0 && (
+                    <div className="mt-3 p-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-lg">
+                      <div className="flex items-center gap-2 mb-2">
+                        <svg
+                          className="w-4 h-4 text-purple-600 dark:text-purple-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-sm font-medium text-purple-800 dark:text-purple-200">
+                          Selected Roles ({selectedRoleItems.length})
+                        </span>
+                      </div>
+
+                      {/* Responsive Grid for Role Tags */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                        {selectedRoleItems.map((role) => (
                           <div
-                            key={item.key}
-                            className="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 px-2 py-1 rounded-md text-xs font-medium"
+                            key={role.id}
+                            className="flex items-center justify-between bg-white dark:bg-gray-800 border border-purple-200 dark:border-purple-600 rounded-md px-3 py-2 text-sm"
                           >
-                            {item.textValue}
+                            <span className="text-purple-800 dark:text-purple-200 font-medium truncate">
+                              {role.name}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newSelection = new Set(
+                                  selectedRoles as Set<string>
+                                );
+                                newSelection.delete(role.id);
+                                handleRoleSelectionChange(newSelection);
+                              }}
+                              className="ml-2 text-purple-400 hover:text-purple-600 dark:hover:text-purple-300 transition-colors flex-shrink-0"
+                            >
+                              <svg
+                                className="w-4 h-4"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>
                           </div>
                         ))}
                       </div>
-                    );
-                  }}
-                >
-                  {roles.map((role) => (
-                    <SelectItem key={role.id} value={role.id}>
-                      {role.name}
-                    </SelectItem>
-                  ))}
-                </Select>
 
-                {/* Single Group Selection - Fixed: Only one Group select */}
+                      {/* Clear All Button */}
+                      {selectedRoleItems.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRoleSelectionChange(new Set())}
+                          className="mt-3 text-xs text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200 font-medium transition-colors"
+                        >
+                          Clear All ({selectedRoleItems.length})
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Single Group Selection */}
                 <Select
                   selectedKeys={member.Group?.id ? [member.Group.id] : []}
-                  label="Group"
+                  label="Group (Optional)"
                   aria-label="Select Group"
                   variant="bordered"
                   size="md"
@@ -475,9 +527,7 @@ export default function EditForm({ member }: Props) {
                   }
                 >
                   {groups.map((group) => (
-                    <SelectItem key={group.id} value={group.id}>
-                      {group.name}
-                    </SelectItem>
+                    <SelectItem key={group.id}>{group.name}</SelectItem>
                   ))}
                 </Select>
               </div>
