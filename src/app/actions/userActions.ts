@@ -22,7 +22,19 @@ export async function updateMemberProfile(
     if (!validated.success)
       return { status: "error", error: validated.error.message };
 
-    const { firstName, lastName, description, city, country } = validated.data;
+    const {
+      firstName,
+      lastName,
+      gender,
+      dateOfBirth,
+      contactNumber,
+      address,
+      description,
+      city,
+      country,
+      roleIds,
+      groupId,
+    } = validated.data;
 
     if (nameUpdated) {
       await prisma.user.update({
@@ -39,11 +51,15 @@ export async function updateMemberProfile(
       data: {
         firstName,
         lastName,
+        gender,
+        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+        contactNumber: contactNumber || null,
+        address: address || null,
         description: description || null,
         city: city || null,
         country: country || null,
         // Update roles - disconnect all current roles and connect new ones
-        rolesId: {
+        Roles: {
           set: [], // Disconnect all current roles
           connect:
             roleIds && roleIds.length > 0 ? roleIds.map((id) => ({ id })) : [],
@@ -51,8 +67,8 @@ export async function updateMemberProfile(
         groupId: groupId || null,
       },
       include: {
-        rolesId: true,
-        groupId: true,
+        Roles: true,
+        Group: true,
       },
     });
     return { status: "success", data: member };

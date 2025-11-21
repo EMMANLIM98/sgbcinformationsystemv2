@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Member } from "@prisma/client";
+import { Member, Role } from "@prisma/client";
 import { Card, CardFooter } from "@heroui/card";
 import { Image } from "@heroui/image";
 import Link from "next/link";
@@ -11,7 +11,9 @@ import PresenceDot from "@/components/PresenceDot";
 import { toggleLikeMember } from "../actions/likeActions";
 
 type Props = {
-  member: Member;
+  member: Member & {
+    Roles?: Role[];
+  };
   likeIds: string[];
 };
 
@@ -63,24 +65,24 @@ export default function MemberCard({ member, likeIds }: Props) {
             {member.firstName + " " + member.lastName},{" "}
             {calculateAge(member.dateOfBirth)}
           </span>
-          {member.roles && member.roles.length > 0 && (
+          {member.Roles && member.Roles.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-1">
-              {member.roles.slice(0, 2).map((role) => (
+              {member.Roles.slice(0, 2).map((role) => (
                 <span
                   key={role.id}
-                  className="text-xs bg-purple-600/80 px-2 py-1 rounded-full"
+                  className="text-xs bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 px-2 py-1 rounded-full transition-all duration-200 shadow-sm"
                 >
                   {role.name}
                 </span>
               ))}
-              {member.roles.length > 2 && (
-                <span className="text-xs bg-gray-600/80 px-2 py-1 rounded-full">
-                  +{member.roles.length - 2} more
+              {member.Roles.length > 2 && (
+                <span className="text-xs bg-gradient-to-r from-emerald-800 to-gray-600 px-2 py-1 rounded-full shadow-sm">
+                  +{member.Roles.length - 2} more
                 </span>
               )}
             </div>
           )}
-          <span className='te"xt-sm'>{member.city}</span>
+          <span className="text-sm">{member.city}</span>
         </div>
       </CardFooter>
     </Card>

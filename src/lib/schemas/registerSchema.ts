@@ -35,8 +35,6 @@ export const profileSchema = z.object({
         message: "You must be at least 1 year old",
       }
     ),
-  contactNumber: z.string().optional(),
-  address: z.string().optional(),
 });
 
 export const combinedRegisterSchema = registerSchema.and(profileSchema);

@@ -30,7 +30,7 @@ import { format, subYears } from "date-fns";
 type Props = {
   member: Member & {
     Roles?: Role[];
-    Group?: Group;
+    Group?: Group | null;
   };
 };
 
