@@ -2,7 +2,7 @@
 
 import { Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { format, subYears } from "date-fns";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { getMemberRoles } from "@/app/actions/roleActions";
 import { getMemberGroups } from "@/app/actions/groupActions";
@@ -22,8 +22,19 @@ export default function ProfileForm() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRoles, setSelectedRoles] = useState<Selection>(new Set()); // Fixed type
+  const [selectedRoles, setSelectedRoles] = useState<Selection>(new Set());
   const dateValue = watch("dateOfBirth");
+
+  // Get selected role names for display
+  const selectedRoleItems = useMemo(() => {
+    if (selectedRoles === "all") {
+      return roles;
+    }
+    if (selectedRoles instanceof Set) {
+      return roles.filter((role) => selectedRoles.has(role.id));
+    }
+    return [];
+  }, [selectedRoles, roles]);
 
   // Fetch roles and groups on component mount
   useEffect(() => {
@@ -72,7 +83,7 @@ export default function ProfileForm() {
     { label: "Female", value: "female" },
   ];
 
-  // Fixed: Handle role selection changes with proper typing
+  // Handle role selection changes with proper typing
   const handleRoleSelectionChange = (keys: Selection) => {
     setSelectedRoles(keys);
 
@@ -94,7 +105,7 @@ export default function ProfileForm() {
         {/* Personal Details Section */}
         <div className="space-y-3 sm:space-y-4">
           <h3 className="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
-            <div className="w-4 h-4 sm:w-5 sm:h-5 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
+            <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-br from-emerald-100 via-green-100 to-emerald-200 dark:from-emerald-900/30 dark:via-green-900/30 dark:to-emerald-800/30 rounded-full flex items-center justify-center border border-emerald-200/50 dark:border-emerald-700/50">
               <svg
                 className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-600 dark:text-emerald-400"
                 fill="currentColor"
@@ -107,7 +118,9 @@ export default function ProfileForm() {
                 />
               </svg>
             </div>
-            Personal Details
+            <span className="bg-gradient-to-r from-emerald-700 via-green-600 to-emerald-600 dark:from-emerald-300 dark:via-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
+              Personal Details
+            </span>
           </h3>
 
           {/* First Name and Last Name */}
@@ -125,10 +138,10 @@ export default function ProfileForm() {
               classNames={{
                 input: "text-sm",
                 inputWrapper:
-                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                  "border-2 border-emerald-200 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px] bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/20",
               }}
               startContent={
-                <div className="text-gray-400">
+                <div className="text-emerald-500 dark:text-emerald-400">
                   <svg
                     className="w-4 h-4"
                     fill="currentColor"
@@ -157,10 +170,10 @@ export default function ProfileForm() {
               classNames={{
                 input: "text-sm",
                 inputWrapper:
-                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                  "border-2 border-emerald-200 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px] bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/20",
               }}
               startContent={
-                <div className="text-gray-400">
+                <div className="text-emerald-500 dark:text-emerald-400">
                   <svg
                     className="w-4 h-4"
                     fill="currentColor"
@@ -194,11 +207,13 @@ export default function ProfileForm() {
               onChange={(e) => setValue("gender", e.target.value)}
               classNames={{
                 trigger:
-                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                  "border-2 border-emerald-200 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px] bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/20",
                 value: "text-sm",
+                listbox:
+                  "bg-gradient-to-br from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/30",
               }}
               startContent={
-                <div className="text-gray-400">
+                <div className="text-emerald-500 dark:text-emerald-400">
                   <svg
                     className="w-4 h-4"
                     fill="currentColor"
@@ -235,10 +250,10 @@ export default function ProfileForm() {
               classNames={{
                 input: "text-sm",
                 inputWrapper:
-                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                  "border-2 border-emerald-200 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px] bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/20",
               }}
               startContent={
-                <div className="text-gray-400">
+                <div className="text-emerald-500 dark:text-emerald-400">
                   <svg
                     className="w-4 h-4"
                     fill="currentColor"
@@ -271,10 +286,10 @@ export default function ProfileForm() {
               classNames={{
                 input: "text-sm",
                 inputWrapper:
-                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                  "border-2 border-emerald-200 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px] bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/20",
               }}
               startContent={
-                <div className="text-gray-400">
+                <div className="text-emerald-500 dark:text-emerald-400">
                   <svg
                     className="w-4 h-4"
                     fill="currentColor"
@@ -286,95 +301,168 @@ export default function ProfileForm() {
               }
             />
           </div>
-
-          {/* Description */}
-          <div>
-            <Textarea
-              defaultValue={getValues("description")}
-              label="About Me (Optional)"
-              variant="bordered"
-              radius="lg"
-              {...register("description")}
-              isInvalid={!!errors.description}
-              errorMessage={errors.description?.message as string}
-              minRows={2}
-              maxRows={4}
-              placeholder="Tell us about yourself..."
-              classNames={{
-                input: "text-sm resize-none",
-                inputWrapper:
-                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200",
-              }}
-            />
-          </div>
         </div>
 
         {/* Church Details Section */}
         <div className="space-y-3 sm:space-y-4">
           <h3 className="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
-            <div className="w-4 h-4 sm:w-5 sm:h-5 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center">
+            <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-br from-emerald-100 via-green-100 to-teal-100 dark:from-emerald-900/30 dark:via-green-900/30 dark:to-teal-900/30 rounded-full flex items-center justify-center border border-emerald-200/50 dark:border-emerald-700/50">
               <svg
-                className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-purple-600 dark:text-purple-400"
+                className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-600 dark:text-emerald-400"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
                 <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
               </svg>
             </div>
-            Church Details
+            <span className="bg-gradient-to-r from-emerald-700 via-green-600 to-teal-600 dark:from-emerald-300 dark:via-green-400 dark:to-teal-400 bg-clip-text text-transparent">
+              Church Details
+            </span>
           </h3>
 
           {/* Role and Group */}
           <div className="grid grid-cols-1 gap-3 sm:gap-4">
-            {/* Multiple Roles Selection - Fixed typing */}
-            <Select
-              label="Church Roles (Choose 1 or more)"
-              aria-label="Select Church Roles"
-              variant="bordered"
-              size="md"
-              radius="lg"
-              selectionMode="multiple"
-              selectedKeys={selectedRoles}
-              onSelectionChange={handleRoleSelectionChange}
-              isLoading={loading}
-              placeholder="Select one or more roles"
-              classNames={{
-                trigger:
-                  "border-2 hover:border-purple-400 group-data-[focus=true]:border-purple-600 shadow-sm transition-all duration-200 min-h-[44px]",
-                value: "text-sm",
-              }}
-              startContent={
-                <div className="text-gray-400">
-                  <svg
-                    className="w-4 h-4"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-                  </svg>
-                </div>
-              }
-              renderValue={(items) => {
-                return (
-                  <div className="flex flex-wrap gap-1">
-                    {items.map((item) => (
-                      <div
-                        key={item.key}
-                        className="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 px-2 py-1 rounded-md text-xs font-medium"
+            {/* Custom Multiple Roles Selection */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                Church Roles <span className="text-red-500">*</span>
+              </label>
+
+              {/* Role Selection Dropdown */}
+              <Select
+                aria-label="Select Church Roles"
+                variant="bordered"
+                size="md"
+                radius="lg"
+                selectionMode="multiple"
+                selectedKeys={selectedRoles}
+                onSelectionChange={handleRoleSelectionChange}
+                isLoading={loading}
+                placeholder="Select one or more roles"
+                classNames={{
+                  trigger:
+                    "border-2 border-emerald-200 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px] bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/20",
+                  value: "text-sm",
+                  listbox:
+                    "bg-gradient-to-br from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/30",
+                }}
+                startContent={
+                  <div className="text-emerald-500 dark:text-emerald-400">
+                    <svg
+                      className="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                    </svg>
+                  </div>
+                }
+                renderValue={() => {
+                  if (selectedRoleItems.length === 0) {
+                    return (
+                      <span className="text-gray-400 text-sm">
+                        Select one or more roles
+                      </span>
+                    );
+                  }
+                  return (
+                    <span className="text-sm bg-gradient-to-r from-emerald-600 to-green-600 dark:from-emerald-300 dark:to-green-300 bg-clip-text text-transparent font-medium">
+                      {selectedRoleItems.length} role
+                      {selectedRoleItems.length !== 1 ? "s" : ""} selected
+                    </span>
+                  );
+                }}
+              >
+                {roles.map((role) => (
+                  <SelectItem key={role.id} value={role.id}>
+                    {role.name}
+                  </SelectItem>
+                ))}
+              </Select>
+
+              {/* Selected Roles Display */}
+              {selectedRoleItems.length > 0 && (
+                <div className="mt-3 p-3 bg-gradient-to-br from-emerald-50 via-green-25 to-teal-50 dark:from-emerald-900/20 dark:via-green-800/15 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg shadow-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-4 h-4 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-3 h-3 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
                       >
-                        {item.textValue}
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-medium bg-gradient-to-r from-emerald-800 to-green-800 dark:from-emerald-200 dark:to-green-200 bg-clip-text text-transparent">
+                      Selected Roles ({selectedRoleItems.length})
+                    </span>
+                  </div>
+
+                  {/* Responsive Grid for Role Tags */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {selectedRoleItems.map((role, index) => (
+                      <div
+                        key={role.id}
+                        className={`
+                          flex items-center justify-between 
+                          bg-gradient-to-r from-white via-emerald-50/80 to-green-50/80 
+                          dark:from-gray-800 dark:via-emerald-900/30 dark:to-green-900/30 
+                          border border-emerald-200/70 dark:border-emerald-600/50 
+                          rounded-lg px-3 py-2 text-sm 
+                          shadow-sm hover:shadow-md 
+                          transition-all duration-300 ease-out
+                          hover:scale-[1.02] hover:bg-gradient-to-r 
+                          hover:from-emerald-100/90 hover:to-green-100/90
+                          dark:hover:from-emerald-800/50 dark:hover:to-green-800/50
+                          hover:border-emerald-300 dark:hover:border-emerald-500
+                        `}
+                        style={{
+                          animationDelay: `${index * 0.1}s`,
+                        }}
+                      >
+                        <span className="font-medium bg-gradient-to-r from-emerald-800 via-green-700 to-teal-600 dark:from-emerald-200 dark:via-green-300 dark:to-teal-300 bg-clip-text text-transparent truncate">
+                          {role.name}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newSelection = new Set(
+                              selectedRoles as Set<string>
+                            );
+                            newSelection.delete(role.id);
+                            handleRoleSelectionChange(newSelection);
+                          }}
+                          className="ml-2 w-6 h-6 rounded-full bg-gradient-to-r from-red-400 to-red-500 hover:from-red-500 hover:to-red-600 text-white flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-sm hover:shadow-md"
+                        >
+                          <svg
+                            className="w-3 h-3"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
                       </div>
                     ))}
                   </div>
-                );
-              }}
-            >
-              {roles.map((role) => (
-                <SelectItem key={role.id} value={role.id}>
-                  {role.name}
-                </SelectItem>
-              ))}
-            </Select>
+
+                  {/* Clear All Button */}
+                  {selectedRoleItems.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => handleRoleSelectionChange(new Set())}
+                      className="mt-3 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-all duration-200 hover:underline hover:scale-105"
+                    >
+                      Clear All ({selectedRoleItems.length})
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Single Group Selection */}
             <Select
@@ -393,11 +481,13 @@ export default function ProfileForm() {
               isLoading={loading}
               classNames={{
                 trigger:
-                  "border-2 hover:border-purple-400 group-data-[focus=true]:border-purple-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                  "border-2 border-emerald-200 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px] bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/20",
                 value: "text-sm",
+                listbox:
+                  "bg-gradient-to-br from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/30",
               }}
               startContent={
-                <div className="text-gray-400">
+                <div className="text-emerald-500 dark:text-emerald-400">
                   <svg
                     className="w-4 h-4"
                     fill="currentColor"
@@ -424,9 +514,9 @@ export default function ProfileForm() {
         {/* Location Section */}
         <div className="space-y-3 sm:space-y-4">
           <h3 className="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
-            <div className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+            <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-br from-emerald-100 via-cyan-100 to-blue-100 dark:from-emerald-900/30 dark:via-cyan-900/30 dark:to-blue-900/30 rounded-full flex items-center justify-center border border-emerald-200/50 dark:border-emerald-700/50">
               <svg
-                className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600 dark:text-blue-400"
+                className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-600 dark:text-emerald-400"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -437,7 +527,9 @@ export default function ProfileForm() {
                 />
               </svg>
             </div>
-            Location
+            <span className="bg-gradient-to-r from-emerald-700 via-cyan-600 to-blue-600 dark:from-emerald-300 dark:via-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
+              Location
+            </span>
           </h3>
 
           {/* Address */}
@@ -454,10 +546,10 @@ export default function ProfileForm() {
             classNames={{
               input: "text-sm",
               inputWrapper:
-                "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                "border-2 border-emerald-200 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px] bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/20",
             }}
             startContent={
-              <div className="text-gray-400">
+              <div className="text-emerald-500 dark:text-emerald-400">
                 <svg
                   className="w-4 h-4"
                   fill="currentColor"
@@ -488,10 +580,10 @@ export default function ProfileForm() {
               classNames={{
                 input: "text-sm",
                 inputWrapper:
-                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                  "border-2 border-emerald-200 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px] bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/20",
               }}
               startContent={
-                <div className="text-gray-400">
+                <div className="text-emerald-500 dark:text-emerald-400">
                   <svg
                     className="w-4 h-4"
                     fill="currentColor"
@@ -520,10 +612,10 @@ export default function ProfileForm() {
               classNames={{
                 input: "text-sm",
                 inputWrapper:
-                  "border-2 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px]",
+                  "border-2 border-emerald-200 hover:border-emerald-400 group-data-[focus=true]:border-emerald-600 shadow-sm transition-all duration-200 min-h-[44px] bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-800 dark:to-emerald-900/20",
               }}
               startContent={
-                <div className="text-gray-400">
+                <div className="text-emerald-500 dark:text-emerald-400">
                   <svg
                     className="w-4 h-4"
                     fill="currentColor"
@@ -542,7 +634,7 @@ export default function ProfileForm() {
         </div>
 
         {/* Privacy Note */}
-        <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-3">
+        <div className="bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50 dark:from-emerald-900/20 dark:via-green-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-3">
           <div className="flex items-start gap-2">
             <div className="flex-shrink-0 mt-0.5">
               <svg
