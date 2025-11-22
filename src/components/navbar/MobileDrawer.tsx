@@ -290,7 +290,7 @@ export default function MobileDrawer({
               <div className="mt-auto p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900/50">
                 <div className="text-center">
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    SGBC Information System
+                    SGBC Information System by ITM
                   </p>
                   <div className="flex justify-center mt-2">
                     <div className="w-16 h-px bg-gradient-to-r from-emerald-500 to-blue-500"></div>
