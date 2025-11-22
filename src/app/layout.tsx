@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "SGBC Information System",
   description: "Created by Emman Lim Jr.",
   icons: {
-    icon: [{ url: "/images/SGBC_Logo.ico" }],
+    icon: [{ url: "/SGBC_Logo.ico" }],
   },
 };
 
