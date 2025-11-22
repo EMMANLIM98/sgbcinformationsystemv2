@@ -40,6 +40,7 @@ export default function EditForm({ member }: Props) {
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRoles, setSelectedRoles] = useState<Selection>(new Set());
+  const [selectedGroup, setSelectedGroup] = useState<Selection>(new Set());
 
   const {
     register,
@@ -66,6 +67,19 @@ export default function EditForm({ member }: Props) {
     }
     return [];
   }, [selectedRoles, roles]);
+
+  // Check if roles have changed
+  const hasRoleChanges = () => {
+    const initialRoleIds = (member.Roles?.map((role) => role.id) || []).sort();
+    const currentRoleIds = Array.from(selectedRoles as Set<string>).sort();
+
+    // Compare arrays
+    if (initialRoleIds.length !== currentRoleIds.length) {
+      return true;
+    }
+
+    return !initialRoleIds.every((id, index) => id === currentRoleIds[index]);
+  };
 
   // Fetch roles and groups on component mount
   useEffect(() => {
@@ -99,6 +113,13 @@ export default function EditForm({ member }: Props) {
       const memberRoleIds = member.Roles?.map((role) => role.id) || [];
       setSelectedRoles(new Set(memberRoleIds));
 
+      // Set initial group selection
+      if (member.Group?.id) {
+        setSelectedGroup(new Set([member.Group.id]));
+      } else {
+        setSelectedGroup(new Set());
+      }
+
       reset({
         firstName: member.firstName,
         lastName: member.lastName,
@@ -122,10 +143,18 @@ export default function EditForm({ member }: Props) {
 
     if (keys === "all") {
       const allRoleIds = roles.map((role) => role.id);
-      setValue("roleIds", allRoleIds);
+      setValue("roleIds", allRoleIds, {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      });
     } else {
       const selectedArray = Array.from(keys as Set<string>);
-      setValue("roleIds", selectedArray);
+      setValue("roleIds", selectedArray, {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      });
     }
   };
 
@@ -361,26 +390,44 @@ export default function EditForm({ member }: Props) {
 
             {/* Church Details Section */}
             <div className="space-y-4">
-              <h3 className="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-br from-emerald-100 via-green-100 to-teal-100 dark:from-emerald-900/30 dark:via-green-900/30 dark:to-teal-900/30 rounded-full flex items-center justify-center border border-emerald-200/50 dark:border-emerald-700/50">
-                  <svg
-                    className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-600 dark:text-emerald-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-                  </svg>
-                </div>
-                <span className="bg-gradient-to-r from-emerald-700 via-green-600 to-teal-600 dark:from-emerald-300 dark:via-green-400 dark:to-teal-400 bg-clip-text text-transparent">
-                  Church Details
-                </span>
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-br from-emerald-100 via-green-100 to-teal-100 dark:from-emerald-900/30 dark:via-green-900/30 dark:to-teal-900/30 rounded-full flex items-center justify-center border border-emerald-200/50 dark:border-emerald-700/50">
+                    <svg
+                      className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-600 dark:text-emerald-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                    </svg>
+                  </div>
+                  <span className="bg-gradient-to-r from-emerald-700 via-green-600 to-teal-600 dark:from-emerald-300 dark:via-green-400 dark:to-teal-400 bg-clip-text text-transparent">
+                    Church Details
+                  </span>
+                </h3>
+                {hasRoleChanges() && (
+                  <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+                    <svg
+                      className="w-3 h-3"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>Changes made</span>
+                  </div>
+                )}
+              </div>
 
               <div className="grid grid-cols-1 gap-3 sm:gap-4">
                 {/* Custom Multiple Roles Selection */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
-                    Church Roles <span className="text-red-500">*</span>
+                    Church Role(s)
                   </label>
 
                   {/* Role Selection Dropdown */}
@@ -519,16 +566,33 @@ export default function EditForm({ member }: Props) {
 
                 {/* Single Group Selection */}
                 <Select
-                  selectedKeys={member.Group?.id ? [member.Group.id] : []}
-                  label="Group (Optional)"
+                  selectedKeys={selectedGroup}
+                  label="Group"
+                  placeholder="Select a group"
                   aria-label="Select Group"
                   variant="bordered"
                   size="md"
                   radius="lg"
-                  {...register("groupId")}
                   isInvalid={!!errors.groupId}
                   errorMessage={errors.groupId?.message}
-                  onChange={(e) => setValue("groupId", e.target.value)}
+                  onSelectionChange={(keys) => {
+                    const newSelection = keys as Selection;
+                    setSelectedGroup(newSelection);
+
+                    // Get the selected value
+                    const selectedArray = Array.from(newSelection);
+                    const selectedValue =
+                      selectedArray.length > 0
+                        ? (selectedArray[0] as string)
+                        : "";
+
+                    // Update form state
+                    setValue("groupId", selectedValue, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                      shouldTouch: true,
+                    });
+                  }}
                   isLoading={loading}
                   classNames={{
                     trigger:
@@ -733,9 +797,30 @@ export default function EditForm({ member }: Props) {
                 variant="solid"
                 radius="lg"
                 size="lg"
-                isDisabled={!isValid || !isDirty}
+                isDisabled={!isValid || (!isDirty && !hasRoleChanges())}
                 isLoading={isSubmitting}
-                className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                className={`w-full sm:w-auto px-8 py-2 font-semibold rounded-lg transition-all duration-300 ease-out transform ${
+                  (isDirty || hasRoleChanges()) && !isSubmitting
+                    ? "bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 hover:from-emerald-700 hover:via-green-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl hover:scale-[1.02] border-0"
+                    : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed border border-gray-300 dark:border-gray-600"
+                }`}
+                startContent={
+                  !isSubmitting && (
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )
+                }
               >
                 {isSubmitting ? (
                   <div className="flex items-center gap-2">
