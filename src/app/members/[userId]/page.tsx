@@ -1,7 +1,7 @@
 import { getMemberByUserId } from "@/app/actions/memberActions";
-import CardInnerWrapper from "@/components/CardInnerWrapper";
 import { notFound } from "next/navigation";
 import React from "react";
+import ViewForm from "./ViewForm";
 
 export default async function MemberDetailedPage({
   params,
@@ -14,8 +14,8 @@ export default async function MemberDetailedPage({
   if (!member) return notFound();
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
-      <CardInnerWrapper header="Profile" body={member.description} />
+    <div className="w-full h-full">
+      <ViewForm member={member} />
     </div>
   );
 }
