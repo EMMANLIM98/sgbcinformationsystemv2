@@ -13,14 +13,90 @@ type Props = {
 };
 
 export default function ViewForm({ member }: Props) {
+  // Dynamic status configuration based on member.isActive
+  const memberStatus = {
+    active: {
+      title: "Active Member",
+      description:
+        "This member is currently active and part of our church community.",
+      icon: (
+        <svg
+          className="w-5 h-5 text-emerald-600 dark:text-emerald-400"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clipRule="evenodd"
+          />
+        </svg>
+      ),
+      bgGradient:
+        "bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50 dark:from-emerald-900/20 dark:via-green-900/20 dark:to-teal-900/20",
+      borderColor: "border-emerald-200 dark:border-emerald-700",
+      titleColor: "text-emerald-800 dark:text-emerald-200",
+      descriptionColor: "text-emerald-700 dark:text-emerald-300",
+    },
+    inactive: {
+      title: "Inactive Member",
+      description:
+        "This member is currently inactive or on leave from church activities.",
+      icon: (
+        <svg
+          className="w-5 h-5 text-orange-600 dark:text-orange-400"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            fillRule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+            clipRule="evenodd"
+          />
+        </svg>
+      ),
+      bgGradient:
+        "bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50 dark:from-orange-900/20 dark:via-amber-900/20 dark:to-yellow-900/20",
+      borderColor: "border-orange-200 dark:border-orange-700",
+      titleColor: "text-orange-800 dark:text-orange-200",
+      descriptionColor: "text-orange-700 dark:text-orange-300",
+    },
+  };
+
+  const currentStatus = member.isActive
+    ? memberStatus.active
+    : memberStatus.inactive;
+
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6">
       <Card className="shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
         <CardHeader className="px-6 sm:px-8 pt-6 sm:pt-8 pb-4">
           <div className="flex flex-col space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-800 via-green-700 to-emerald-700 dark:from-emerald-200 dark:via-green-300 dark:to-emerald-300 bg-clip-text text-transparent">
-              Member Profile
-            </h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-800 via-green-700 to-emerald-700 dark:from-emerald-200 dark:via-green-300 dark:to-emerald-300 bg-clip-text text-transparent">
+                Member Profile
+              </h1>
+              {/* Status Badge */}
+              <Chip
+                variant="flat"
+                className={`${
+                  member.isActive
+                    ? "bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/30 dark:to-green-900/30 border border-emerald-300 dark:border-emerald-600"
+                    : "bg-gradient-to-r from-orange-100 to-amber-100 dark:from-orange-900/30 dark:to-amber-900/30 border border-orange-300 dark:border-orange-600"
+                }`}
+                size="sm"
+              >
+                <span
+                  className={`font-medium text-xs ${
+                    member.isActive
+                      ? "text-emerald-800 dark:text-emerald-200"
+                      : "text-orange-800 dark:text-orange-200"
+                  }`}
+                >
+                  {member.isActive ? "ACTIVE" : "INACTIVE"}
+                </span>
+              </Chip>
+            </div>
             <p className="text-emerald-600 dark:text-emerald-400 text-sm sm:text-base">
               View member information and profile details
             </p>
@@ -159,7 +235,8 @@ export default function ViewForm({ member }: Props) {
                         </svg>
                       </div>
                       <span className="text-sm font-medium bg-gradient-to-r from-emerald-800 to-green-800 dark:from-emerald-200 dark:to-green-200 bg-clip-text text-transparent">
-                        Active Roles ({member.Roles.length})
+                        {member.isActive ? "Active" : "Assigned"} Roles (
+                        {member.Roles.length})
                       </span>
                     </div>
 
@@ -179,6 +256,7 @@ export default function ViewForm({ member }: Props) {
                             hover:from-emerald-100/90 hover:to-green-100/90
                             dark:hover:from-emerald-800/50 dark:hover:to-green-800/50
                             hover:border-emerald-300 dark:hover:border-emerald-500
+                            ${!member.isActive ? "opacity-70" : ""}
                           `}
                           style={{
                             animationDelay: `${index * 0.1}s`,
@@ -190,6 +268,16 @@ export default function ViewForm({ member }: Props) {
                         </Chip>
                       ))}
                     </div>
+
+                    {/* Inactive Member Note */}
+                    {!member.isActive && (
+                      <div className="mt-3 p-2 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 rounded-md">
+                        <p className="text-xs text-orange-700 dark:text-orange-300 italic">
+                          Note: Roles are currently inactive due to member
+                          status
+                        </p>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
@@ -206,14 +294,23 @@ export default function ViewForm({ member }: Props) {
                   Church Group
                 </label>
                 {member.Group ? (
-                  <Chip
-                    variant="flat"
-                    className="bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/30 dark:to-green-900/30 border border-emerald-300 dark:border-emerald-600"
-                  >
-                    <span className="font-medium text-emerald-800 dark:text-emerald-200">
-                      {member.Group.name}
-                    </span>
-                  </Chip>
+                  <div className="flex items-center gap-2">
+                    <Chip
+                      variant="flat"
+                      className={`bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/30 dark:to-green-900/30 border border-emerald-300 dark:border-emerald-600 ${
+                        !member.isActive ? "opacity-70" : ""
+                      }`}
+                    >
+                      <span className="font-medium text-emerald-800 dark:text-emerald-200">
+                        {member.Group.name}
+                      </span>
+                    </Chip>
+                    {!member.isActive && (
+                      <span className="text-xs text-orange-600 dark:text-orange-400 italic">
+                        (Inactive participation)
+                      </span>
+                    )}
+                  </div>
                 ) : (
                   <p className="text-base font-medium text-gray-500 dark:text-gray-400 italic">
                     No group assigned
@@ -307,29 +404,22 @@ export default function ViewForm({ member }: Props) {
               )}
             </div>
 
-            {/* Member Status */}
-            <div className="bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50 dark:from-emerald-900/20 dark:via-green-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-4">
+            {/* Dynamic Member Status */}
+            <div
+              className={`${currentStatus.bgGradient} border ${currentStatus.borderColor} rounded-lg p-4`}
+            >
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 mt-0.5">
-                  <svg
-                    className="w-5 h-5 text-emerald-600 dark:text-emerald-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
+                <div className="flex-shrink-0 mt-0.5">{currentStatus.icon}</div>
                 <div>
-                  <h4 className="text-sm font-semibold text-emerald-800 dark:text-emerald-200 mb-1">
-                    Active Member
+                  <h4
+                    className={`text-sm font-semibold ${currentStatus.titleColor} mb-1`}
+                  >
+                    {currentStatus.title}
                   </h4>
-                  <p className="text-xs text-emerald-700 dark:text-emerald-300 leading-relaxed">
-                    This member is currently active and part of our church
-                    community.
+                  <p
+                    className={`text-xs ${currentStatus.descriptionColor} leading-relaxed`}
+                  >
+                    {currentStatus.description}
                   </p>
                 </div>
               </div>
